@@ -4,4 +4,5 @@ Werkzeug
 numpy
 pandas
 scikit-learn
-python-dotenv 
+python-dotenv
+gunicorn
