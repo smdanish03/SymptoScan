@@ -134,11 +134,6 @@ SymptoScan/
 │       └── style.css
 │
 └── venv/
-```
-
-> `venv/` and `.env` should **not** be uploaded to GitHub.
-
----
 
 ## ⚙️ Requirements
 
