@@ -1,0 +1,7 @@
+Flask
+mysql-connector-python
+Werkzeug
+numpy
+pandas
+scikit-learn
+python-dotenv 

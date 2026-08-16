@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | SymptoScan AI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="brand">
+        <div class="brand-mark">S</div>
+
+        <div>
+            <div class="brand-name">SymptoScan</div>
+            <div class="brand-subtitle">AI Health Assistant</div>
+        </div>
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="/dashboard" class="active">
+            Dashboard
+        </a>
+
+        <a href="/predict">
+            Predict
+        </a>
+
+        <a href="/history">
+            History
+        </a>
+
+        <a href="/logout" class="logout-link">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="dashboard">
+
+
+    <!-- ================= HERO ================= -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="ai-badge">
+                <span class="pulse"></span>
+                AI HEALTH ANALYSIS
+            </div>
+
+
+            <h1>
+                Understand your symptoms
+                <span>with AI.</span>
+            </h1>
+
+
+            <p>
+                Welcome back, <strong>{{ name }}</strong>.
+                Analyze your symptoms and explore
+                possible health conditions using
+                SymptoScan's machine learning model.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a href="/predict" class="primary-btn">
+                    Start AI Prediction
+                    <span>→</span>
+                </a>
+
+                <a href="/history" class="secondary-btn">
+                    View History
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- AI VISUAL -->
+
+        <div class="ai-visual">
+
+            <div class="orb">
+
+                <div class="orb-core">
+                    AI
+                </div>
+
+            </div>
+
+
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+
+
+            <div class="floating-card card-top">
+                <span>●</span>
+                Symptom Analysis
+            </div>
+
+
+            <div class="floating-card card-bottom">
+                <span>✓</span>
+                AI Ready
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= STATS ================= -->
+
+    <section class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-title">
+                    TOTAL PREDICTIONS
+                </span>
+
+                <div class="stat-icon blue">
+                    +
+                </div>
+
+            </div>
+
+
+            <div class="stat-number">
+                {{ total_predictions }}
+            </div>
+
+
+            <div class="stat-description">
+                Analysis records created
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-title">
+                    LATEST RESULT
+                </span>
+
+                <div class="stat-icon green">
+                    ✓
+                </div>
+
+            </div>
+
+
+            {% if latest_prediction %}
+
+                <div class="stat-number condition">
+                    {{ latest_prediction.disease }}
+                </div>
+
+                <div class="stat-description">
+                    Most recent AI prediction
+                </div>
+
+            {% else %}
+
+                <div class="stat-number">
+                    —
+                </div>
+
+                <div class="stat-description">
+                    No prediction yet
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-title">
+                    ACCOUNT
+                </span>
+
+                <div class="stat-icon purple">
+                    ✓
+                </div>
+
+            </div>
+
+
+            <div class="stat-number">
+                Active
+            </div>
+
+
+            <div class="stat-description">
+                Your account is secure
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= QUICK ACTIONS ================= -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-label">
+                    QUICK ACTIONS
+                </div>
+
+                <h2>
+                    What would you like to do?
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="action-grid">
+
+
+            <!-- Prediction -->
+
+            <a href="/predict" class="action-card">
+
+                <div class="action-icon blue-icon">
+                    +
+                </div>
+
+
+                <div class="action-info">
+
+                    <h3>
+                        New AI Prediction
+                    </h3>
+
+                    <p>
+                        Enter your symptoms and
+                        receive an AI-generated
+                        possible condition.
+                    </p>
+
+                    <span class="action-link">
+                        Start analysis →
+                    </span>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- History -->
+
+            <a href="/history" class="action-card">
+
+                <div class="action-icon purple-icon">
+                    ≡
+                </div>
+
+
+                <div class="action-info">
+
+                    <h3>
+                        Prediction History
+                    </h3>
+
+                    <p>
+                        Review your previous
+                        symptom analyses and
+                        prediction records.
+                    </p>
+
+                    <span class="action-link purple-text">
+                        View records →
+                    </span>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= RECENT RESULT ================= -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-label">
+                    RECENT ACTIVITY
+                </div>
+
+                <h2>
+                    Latest prediction
+                </h2>
+
+            </div>
+
+
+            <a href="/history" class="view-all">
+                View all
+            </a>
+
+        </div>
+
+
+        {% if latest_prediction %}
+
+        <div class="recent-card">
+
+            <div class="recent-left">
+
+                <div class="result-icon">
+                    ✓
+                </div>
+
+
+                <div>
+
+                    <span class="result-label">
+                        POSSIBLE CONDITION
+                    </span>
+
+                    <h3>
+                        {{ latest_prediction.disease }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="result-status">
+                ANALYZED
+            </div>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="empty-card">
+
+            <div class="empty-icon">
+                +
+            </div>
+
+            <h3>
+                No predictions yet
+            </h3>
+
+            <p>
+                Start your first AI analysis to
+                see your results here.
+            </p>
+
+            <a href="/predict" class="primary-btn">
+                Start Prediction →
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+
+    <!-- ================= DISCLAIMER ================= -->
+
+    <section class="disclaimer">
+
+        <div class="disclaimer-icon">
+            i
+        </div>
+
+
+        <div>
+
+            <h3>
+                About SymptoScan
+            </h3>
+
+            <p>
+                SymptoScan is an educational AI project
+                that analyzes selected symptoms and
+                predicts a possible condition using a
+                machine learning model.
+            </p>
+
+            <p class="warning">
+                This system is for educational and
+                demonstration purposes only and is not
+                a medical diagnosis.
+            </p>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<footer>
+    SymptoScan AI Health Assistant
+</footer>
+
+
+</body>
+</html>

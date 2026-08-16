@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>History - SymptoScan</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav>
+
+        <div class="logo">
+            SymptoScan
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/dashboard">Dashboard</a>
+            </li>
+
+            <li>
+                <a href="/predict">Predict</a>
+            </li>
+
+            <li>
+                <a href="/history">History</a>
+            </li>
+
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- History Section -->
+
+    <section class="prediction">
+
+        <h1>Prediction History</h1>
+
+        <p>
+            Your previous SymptoScan predictions.
+        </p>
+
+
+        {% if predictions %}
+
+        <div class="history-table-container">
+
+            <table class="history-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Name</th>
+
+                        <th>Age</th>
+
+                        <th>Gender</th>
+
+                        <th>Symptoms</th>
+
+                        <th>Possible Condition</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for prediction in predictions %}
+
+                    <tr>
+
+                        <td>
+                            {{ prediction.created_at }}
+                        </td>
+
+                        <td>
+                            {{ prediction.name }}
+                        </td>
+
+                        <td>
+                            {{ prediction.age }}
+                        </td>
+
+                        <td>
+                            {{ prediction.gender }}
+                        </td>
+
+                        <td>
+                            {{ prediction.symptoms }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ prediction.disease }}
+                            </strong>
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-history">
+
+            <h2>No Prediction History</h2>
+
+            <p>
+                You haven't made any predictions yet.
+            </p>
+
+            <a href="/predict" class="btn">
+                Make Your First Prediction
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+</body>
+
+</html>

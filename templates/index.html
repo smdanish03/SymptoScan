@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SymptoScan - AI Disease Prediction</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+    <!-- Navbar -->
+
+    <nav>
+
+        <div class="logo">
+            SymptoScan
+        </div>
+
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="/predict">
+                    Predict
+                </a>
+            </li>
+
+            <li>
+                <a href="/history">
+                    History
+                </a>
+            </li>
+
+            <li>
+                <a href="/register">
+                    Register
+                </a>
+            </li>
+
+            <li>
+                <a href="/login">
+                    Login
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+
+    <!-- Hero Section -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <p class="hero-label">
+                AI-POWERED HEALTH ASSISTANT
+            </p>
+
+
+            <h1>
+                Understand Your Symptoms
+                With AI
+            </h1>
+
+
+            <p>
+                SymptoScan analyzes your selected symptoms
+                using an Artificial Intelligence model and
+                provides a possible health condition.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a href="/predict" class="btn">
+                    Start Prediction
+                </a>
+
+
+                <a href="/register"
+                   class="btn secondary-btn">
+                    Create Account
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Features Section -->
+
+    <section class="features">
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🧠
+            </div>
+
+            <h2>
+                AI-Based Prediction
+            </h2>
+
+            <p>
+                Uses a machine learning model to analyze
+                selected symptoms.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🔒
+            </div>
+
+            <h2>
+                Personal History
+            </h2>
+
+            <p>
+                Registered users can securely view their
+                previous prediction records.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ⚡
+            </div>
+
+            <h2>
+                Quick Results
+            </h2>
+
+            <p>
+                Enter symptoms and receive a possible
+                condition within seconds.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Information Section -->
+
+    <section class="home-info">
+
+        <div>
+
+            <p class="section-label">
+                ABOUT SYMPTOSCAN
+            </p>
+
+            <h2>
+                A Simple Approach to
+                Symptom Analysis
+            </h2>
+
+            <p>
+                SymptoScan is an educational AI-based
+                disease prediction project. Users can
+                enter basic information and select
+                symptoms to receive a possible condition
+                predicted by the trained machine learning
+                model.
+            </p>
+
+        </div>
+
+
+        <div class="home-info-note">
+
+            <h3>
+                Important
+            </h3>
+
+            <p>
+                SymptoScan is designed for educational
+                and demonstration purposes. It does not
+                replace professional medical advice,
+                diagnosis, or treatment.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Footer -->
+
+    <footer>
+
+        <p>
+            © 2026 SymptoScan. All rights reserved.
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

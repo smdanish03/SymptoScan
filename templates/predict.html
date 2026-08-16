@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Predict Disease - SymptoScan</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav>
+
+        <div class="logo">
+            SymptoScan
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/dashboard">Dashboard</a>
+            </li>
+
+            <li>
+                <a href="/predict">Predict</a>
+            </li>
+
+            <li>
+                <a href="/history">History</a>
+            </li>
+
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- Prediction Section -->
+
+    <section class="prediction">
+
+        <h1>Disease Prediction</h1>
+
+        <p>
+            Enter your details and select your symptoms.
+        </p>
+
+        {% if error %}
+
+        <p class="error-message">
+            {{ error }}
+        </p>
+
+        {% endif %}
+        
+        <form action="/predict" method="POST">
+
+            <!-- Name -->
+
+            <label for="name">
+                Full Name
+            </label>
+
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+
+            <!-- Age -->
+
+            <label for="age">
+                Age
+            </label>
+
+            <input type="number" id="age" name="age" placeholder="Enter your age" min="1" max="120" required>
+
+
+            <!-- Gender -->
+
+            <label for="gender">
+                Gender
+            </label>
+
+            <select id="gender" name="gender" required>
+
+                <option value="">
+                    Select Gender
+                </option>
+
+                <option value="Male">
+                    Male
+                </option>
+
+                <option value="Female">
+                    Female
+                </option>
+
+                <option value="Other">
+                    Other
+                </option>
+
+            </select>
+
+
+            <!-- Symptoms -->
+
+            <h3>Select Symptoms</h3>
+
+            <label>
+                <input type="checkbox" name="symptoms" value="Fever">
+                Fever
+            </label>
+
+
+            <label>
+                <input type="checkbox" name="symptoms" value="Cough">
+                Cough
+            </label>
+
+
+            <label>
+                <input type="checkbox" name="symptoms" value="Headache">
+                Headache
+            </label>
+
+
+            <label>
+                <input type="checkbox" name="symptoms" value="Vomiting">
+                Vomiting
+            </label>
+
+
+            <label>
+                <input type="checkbox" name="symptoms" value="Fatigue">
+                Fatigue
+            </label>
+
+
+            <label>
+                <input type="checkbox" name="symptoms" value="Body Pain">
+                Body Pain
+            </label>
+
+
+            <button type="submit">
+                Predict Disease
+            </button>
+
+        </form>
+
+    </section>
+
+</body>
+
+</html>

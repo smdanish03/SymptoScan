@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login - SymptoScan</title>
+
+
+    <!-- Google Font -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- Main CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav>
+
+        <div class="logo">
+            SymptoScan
+        </div>
+
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/predict">
+                    Predict
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/history">
+                    History
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/register">
+                    Register
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/login">
+                    Login
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         LOGIN SECTION
+    ====================================================== -->
+
+    <main class="login-page">
+
+
+        <section class="login-card">
+
+
+            <!-- LOGIN HEADER -->
+
+            <div class="login-header">
+
+                <div class="login-icon">
+                    🔐
+                </div>
+
+
+                <p class="login-label">
+                    SYPTOSCAN ACCOUNT
+                </p>
+
+
+                <h1>
+                    Welcome Back
+                </h1>
+
+
+                <p class="login-subtitle">
+                    Login to continue using
+                    SymptoScan AI.
+                </p>
+
+            </div>
+
+
+
+            <!-- ERROR MESSAGE -->
+
+            {% if error %}
+
+            <div class="error-message">
+
+                {{ error }}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- LOGIN FORM -->
+
+            <form action="/login"
+                  method="POST">
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        required>
+
+                </div>
+
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required>
+
+                </div>
+
+
+
+                <!-- LOGIN BUTTON -->
+
+                <button type="submit"
+                        class="login-btn">
+
+                    Login to Account
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+
+
+            <!-- REGISTER -->
+
+            <div class="auth-link">
+
+                <span>
+                    Don't have an account?
+                </span>
+
+
+                <a href="/register">
+                    Create Account
+                </a>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            © 2026 SymptoScan. All rights reserved.
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

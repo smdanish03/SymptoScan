@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register - SymptoScan</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav>
+
+        <div class="logo">
+            SymptoScan
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">Home</a>
+            </li>
+
+            <li>
+                <a href="/predict">Predict</a>
+            </li>
+
+            <li>
+                <a href="/history">History</a>
+            </li>
+
+            <li>
+                <a href="/register">Register</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- Register Section -->
+
+    <section class="prediction">
+
+        <h1>Create Account</h1>
+
+        <p>
+            Register to use SymptoScan.
+        </p>
+
+        <form action="/register" method="POST">
+          
+            {% if error %}
+
+            <p class="error-message">
+                {{ error }}
+            </p>
+
+            {% endif %}
+
+            <label for="name">
+                Full Name
+            </label>
+
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+
+            <label for="email">
+                Email
+            </label>
+
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+
+            <label for="password">
+                Password
+            </label>
+
+            <input type="password" id="password" name="password" placeholder="Create a password" required>
+
+
+            <button type="submit">
+                Create Account
+            </button>
+
+        </form>
+
+    </section>
+
+</body>
+
+</html>

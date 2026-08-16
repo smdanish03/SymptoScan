@@ -1,0 +1,9 @@
+Fever,Cough,Headache,Vomiting,Fatigue,BodyPain,Disease
+1,1,1,0,1,1,Flu
+1,1,0,0,1,0,Common Cold
+0,0,1,1,1,0,Food Poisoning
+1,0,1,0,0,1,Dengue
+1,1,1,1,1,1,Typhoid
+0,1,0,0,0,0,Allergy
+1,0,0,0,1,1,Viral Fever
+0,0,1,0,1,0,Migraine

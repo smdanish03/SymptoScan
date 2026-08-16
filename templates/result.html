@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Prediction Result - SymptoScan</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav>
+
+        <div class="logo">
+            SymptoScan
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/dashboard">Dashboard</a>
+            </li>
+
+            <li>
+                <a href="/predict">Predict</a>
+            </li>
+
+            <li>
+                <a href="/history">History</a>
+            </li>
+
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- Result Section -->
+
+    <section class="prediction">
+
+        <h1>Prediction Result</h1>
+
+        <div class="result-card">
+
+            <h2>
+                Hello, {{ name }}! 👋
+            </h2>
+
+
+            <!-- Patient Information -->
+
+            <div class="patient-info">
+
+                <p>
+                    <strong>Name:</strong>
+                    {{ name }}
+                </p>
+
+                <p>
+                    <strong>Age:</strong>
+                    {{ age }}
+                </p>
+
+                <p>
+                    <strong>Gender:</strong>
+                    {{ gender }}
+                </p>
+
+            </div>
+
+
+            <!-- Prediction -->
+
+            <div class="result">
+
+                <h3>Possible Condition</h3>
+
+                <h2>
+                    {{ disease }}
+                </h2>
+
+            </div>
+
+
+            <!-- Information Note -->
+
+            <div class="result-note">
+
+                <p>
+                    SymptoScan uses Artificial Intelligence
+                    to analyze the selected symptoms and
+                    provide a possible condition.
+                </p>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <a href="/predict" class="btn">
+                Predict Again
+            </a>
+
+            <a href="/history" class="btn secondary-btn">
+                View History
+            </a>
+
+        </div>
+
+    </section>
+
+</body>
+
+</html>
