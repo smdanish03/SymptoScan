@@ -2,33 +2,45 @@
 
 > **AI-Powered Health Assistant for Educational Disease Prediction**
 
-SymptoScan is a web-based educational project that uses **Machine Learning** to analyze selected symptoms and predict a possible health condition.
+[🌐 Live Demo](https://symptoscan-production-ab95.up.railway.app) · [💻 GitHub Repository](https://github.com/smdanish03/SymptoScan)
 
-The application is built using **Python Flask**, **MySQL**, and a **Decision Tree Classifier**. Users can create an account, log in, enter basic information, select symptoms, receive an AI-generated possible condition, and view their previous prediction history.
+SymptoScan is a web-based educational application that uses **Machine Learning** to analyze selected symptoms and predict a possible health condition.
 
-⚠️ **Disclaimer:** SymptoScan is an educational and demonstration project. It is **not a medical diagnosis system** and should not be used as a replacement for professional medical advice.
+The application is built using **Python Flask**, **MySQL**, and a **Decision Tree Classifier**. Users can create an account, log in securely, enter patient information, select symptoms, receive an AI-generated possible condition, and view their previous prediction history.
+
+> ⚠️ **Disclaimer:** SymptoScan is an educational and demonstration project. It is **not a medical diagnosis system** and should not be used as a replacement for professional medical advice.
 
 ---
 
-## 🚀 Features
+# 🚀 Live Demo
+
+🌐 **Live Application:**
+https://symptoscan-production-ab95.up.railway.app
+
+The application is deployed using **Railway** with a **MySQL database**.
+
+---
+
+# ✨ Features
 
 * 👤 User Registration
-* 🔐 Secure Login
+* 🔐 Secure Login System
 * 🔑 Password Hashing using Werkzeug
-* 🧠 Machine Learning Disease Prediction
+* 🧠 Machine Learning-Based Disease Prediction
 * 🌳 Decision Tree Classifier
 * 🩺 Symptom-Based Analysis
 * 📊 Prediction History
+* 📈 Dashboard with Recent Prediction Information
 * 🗄️ MySQL Database Integration
+* 🔒 Environment Variables for Sensitive Credentials
 * 📱 Responsive Web Interface
-* 🔒 Environment Variables using `.env`
-* 📈 Dashboard with recent prediction information
+* ☁️ Cloud Deployment using Railway
 
 ---
 
-## 🛠️ Technologies Used
+# 🛠️ Technologies Used
 
-### Backend
+## Backend
 
 * Python
 * Flask
@@ -36,28 +48,34 @@ The application is built using **Python Flask**, **MySQL**, and a **Decision Tre
 * mysql-connector-python
 * Werkzeug
 * python-dotenv
+* Gunicorn
 
-### Machine Learning
+## Machine Learning
 
 * NumPy
 * Pandas
 * Scikit-learn
 * Decision Tree Classifier
 
-### Frontend
+## Frontend
 
 * HTML5
 * CSS3
 * Google Fonts
 * Jinja2 Templates
 
+## Deployment
+
+* Railway
+* Railway MySQL
+
 ---
 
-## 🧠 Machine Learning Model
+# 🧠 Machine Learning Model
 
-SymptoScan uses a **Decision Tree Classifier** to predict a possible condition from selected symptoms.
+SymptoScan uses a **Decision Tree Classifier** to predict a possible health condition based on selected symptoms.
 
-### Input Features
+## Input Features
 
 The current model uses six symptoms:
 
@@ -75,19 +93,23 @@ Selected     → 1
 Not Selected → 0
 ```
 
-The trained model is stored as:
+The trained model is stored at:
 
 ```text
 models/disease_model.pkl
 ```
 
-The model is trained using `train_model.py`.
+The model is trained using:
+
+```text
+train_model.py
+```
 
 ---
 
-## 🩺 Example Conditions
+# 🩺 Example Conditions
 
-The current educational dataset contains examples such as:
+The educational dataset contains example conditions such as:
 
 * Flu
 * Common Cold
@@ -98,11 +120,11 @@ The current educational dataset contains examples such as:
 * Viral Fever
 * Migraine
 
-> These predictions are based only on the small educational dataset included in this project and should not be interpreted as clinically accurate diagnoses.
+> These predictions are based on a small educational dataset and should not be interpreted as clinically accurate diagnoses.
 
 ---
 
-## 📁 Project Structure
+# 📁 Project Structure
 
 ```text
 SymptoScan/
@@ -112,7 +134,6 @@ SymptoScan/
 ├── requirements.txt
 ├── README.md
 ├── .gitignore
-├── .env
 │
 ├── data/
 │   └── dataset.csv
@@ -129,32 +150,34 @@ SymptoScan/
 │   ├── result.html
 │   └── history.html
 │
-├── static/
-│   └── css/
-│       └── style.css
-│
-└── venv/
+└── static/
+    └── css/
+        └── style.css
+```
 
-## ⚙️ Requirements
+> The `.env` file and `venv` folder should not be uploaded to GitHub.
+
+---
+
+# ⚙️ Requirements
 
 Make sure you have installed:
 
 * Python 3.13+
 * MySQL Server
 * Git
-* VS Code
 
 ---
 
-## 📦 Installation
+# 📦 Installation
 
-### 1. Clone the repository
+## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/SymptoScan.git
+git clone https://github.com/smdanish03/SymptoScan.git
 ```
 
-Go inside the project:
+Move into the project folder:
 
 ```bash
 cd SymptoScan
@@ -162,9 +185,9 @@ cd SymptoScan
 
 ---
 
-### 2. Create a Virtual Environment
+## 2. Create a Virtual Environment
 
-Windows:
+### Windows
 
 ```bash
 py -3.13 -m venv venv
@@ -178,46 +201,40 @@ venv\Scripts\activate
 
 ---
 
-### 3. Install Dependencies
+## 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-The main dependencies are:
-
-```text
-Flask
-mysql-connector-python
-Werkzeug
-numpy
-pandas
-scikit-learn
-python-dotenv
-```
-
 ---
 
-## 🗄️ MySQL Database Setup
+# 🗄️ MySQL Database Setup
 
-Create a MySQL database:
+Create a database:
 
 ```sql
 CREATE DATABASE symptoscan;
 ```
 
-Create the users table:
+Select the database:
+
+```sql
+USE symptoscan;
+```
+
+Create the `users` table:
 
 ```sql
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL
 );
 ```
 
-Create the predictions table:
+Create the `predictions` table:
 
 ```sql
 CREATE TABLE predictions (
@@ -235,7 +252,7 @@ CREATE TABLE predictions (
 
 ---
 
-## 🔐 Environment Variables
+# 🔐 Environment Variables
 
 Create a `.env` file in the project root:
 
@@ -248,13 +265,13 @@ DB_PASSWORD=your_mysql_password
 DB_NAME=symptoscan
 ```
 
-**Never upload `.env` to GitHub.**
+> ⚠️ **Never upload your `.env` file to GitHub.**
 
-The application reads these values using `python-dotenv`.
+For deployment, configure the environment variables directly in your hosting platform.
 
 ---
 
-## 🧠 Train the Machine Learning Model
+# 🧠 Train the Machine Learning Model
 
 If the model file does not exist, run:
 
@@ -262,23 +279,23 @@ If the model file does not exist, run:
 python train_model.py
 ```
 
-You should see:
+After successful training:
 
 ```text
 Model trained successfully!
 ```
 
-This creates:
+The trained model will be created at:
 
 ```text
 models/disease_model.pkl
 ```
 
-The training script loads `data/dataset.csv`, separates the `Disease` column as the target, trains a `DecisionTreeClassifier`, and saves the model in the `models` directory.
+The training script loads the dataset, separates the `Disease` column as the target, trains a `DecisionTreeClassifier`, and saves the trained model.
 
 ---
 
-## ▶️ Run the Application
+# ▶️ Run the Application Locally
 
 Activate the virtual environment:
 
@@ -286,7 +303,7 @@ Activate the virtual environment:
 venv\Scripts\activate
 ```
 
-Run Flask:
+Run the application:
 
 ```bash
 python app.py
@@ -300,71 +317,71 @@ http://127.0.0.1:5000
 
 ---
 
-## 🔄 Application Flow
+# 🔄 Application Flow
 
 ```text
 User
-  │
-  ▼
+ │
+ ▼
 Home Page
-  │
-  ▼
+ │
+ ▼
 Register / Login
-  │
-  ▼
+ │
+ ▼
 Dashboard
-  │
-  ▼
+ │
+ ▼
 Enter Patient Information
-  │
-  ▼
+ │
+ ▼
 Select Symptoms
-  │
-  ▼
+ │
+ ▼
 Machine Learning Model
-  │
-  ▼
+ │
+ ▼
 Possible Condition
-  │
-  ▼
+ │
+ ▼
 Save Result in MySQL
-  │
-  ▼
+ │
+ ▼
 Prediction History
 ```
 
 ---
 
-## 🔒 Security
+# 🔒 Security Features
 
-SymptoScan includes basic security practices such as:
+SymptoScan includes basic security practices:
 
 * Password hashing using Werkzeug
 * Environment variables for database credentials
 * Session-based authentication
-* Login-protected prediction pages
-* Login-protected prediction history
+* Login-protected pages
 * SQL parameterized queries
+* Sensitive credentials excluded from GitHub using `.gitignore`
 
 ---
 
-## 📸 Main Pages
+# 📱 Main Pages
 
-### Home
+## 🏠 Home
 
-Introduces SymptoScan and provides access to prediction and account creation.
+Introduces SymptoScan and provides access to prediction and account features.
 
-### Register
+## 📝 Register
 
-Allows a new user to create an account.
+Allows new users to create an account.
 
-### Login
+## 🔐 Login
 
 Authenticates registered users.
 
-### Dashboard
+## 📊 Dashboard
 
-Displays:
+Displays information such as:
 
 * Total predictions
 * Latest prediction
@@ -372,44 +389,44 @@ Displays:
 * Quick actions
 * Recent activity
 
-### Prediction
+## 🩺 Prediction
 
-Users enter:
+Users provide:
 
 * Name
 * Age
 * Gender
 * Symptoms
 
-The selected symptoms are converted into model features before prediction.
+Selected symptoms are converted into machine learning model features.
 
-### Result
+## 📋 Result
 
-Displays the predicted possible condition and patient information.
+Displays the predicted possible condition and submitted patient information.
 
-### History
+## 📜 History
 
-Displays previous prediction records saved for the logged-in user.
+Displays previous prediction records for the logged-in user.
 
 ---
 
-## ⚠️ Important Disclaimer
+# ⚠️ Important Disclaimer
 
 SymptoScan is **not a medical device** and does not provide medical diagnosis, treatment, or professional medical advice.
 
-The predictions are generated from a small educational dataset and are intended only to demonstrate how a machine-learning-based web application can work.
+Predictions are generated from a small educational dataset and are intended only to demonstrate how a machine-learning-based web application can work.
 
 For real health concerns, consult a qualified healthcare professional.
 
 ---
 
-## 🔮 Future Improvements
+# 🔮 Future Improvements
 
 Possible future improvements include:
 
-* Larger and clinically validated dataset
-* More symptoms
-* More machine learning algorithms
+* Larger and clinically validated datasets
+* More symptoms and conditions
+* Multiple machine learning algorithms
 * Model accuracy comparison
 * Prediction confidence visualization
 * Doctor consultation module
@@ -417,23 +434,25 @@ Possible future improvements include:
 * Medical information resources
 * Admin dashboard
 * Better data privacy controls
-* Cloud deployment
 * REST API
 * Improved mobile UI
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
-## Mohd Danish Shaikh **
+**Mohd Danish Shaikh**
 
 Computer Engineering Student
 Aspiring Software Engineer
 
+* GitHub: https://github.com/smdanish03
+* LinkedIn: https://www.linkedin.com/in/danish-shaikh-6544a9361
+
 ---
 
-## 📄 License
+# 📄 License
 
 This project is created for **educational and academic purposes**.
 
-You may modify and improve it for learning and demonstration.
+You are welcome to study, modify, and improve the project for learning and demonstration purposes.
