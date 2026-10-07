@@ -1,100 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
+{% block title %}Create Account - SymptoScan AI{% endblock %}
 
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Register - SymptoScan</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-</head>
-
-<body>
-
-    <!-- Navbar -->
-
-    <nav>
-
-        <div class="logo">
-            SymptoScan
+{% block content %}
+<div class="auth-page-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-icon-badge">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7.5" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+            </div>
+            <h2>Create Your Account</h2>
+            <p>Join SymptoScan AI to safely log and track symptom evaluations across time.</p>
         </div>
 
-        <ul class="nav-links">
+        <form action="/register" method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="name">Full Name <span class="required">*</span></label>
+                <div class="input-with-icon">
+                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <input type="text" id="name" name="name" class="form-input" 
+                           placeholder="John Doe" required autofocus>
+                </div>
+            </div>
 
-            <li>
-                <a href="/">Home</a>
-            </li>
+            <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <div class="input-with-icon">
+                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <input type="email" id="email" name="email" class="form-input" 
+                           placeholder="name@example.com" required>
+                </div>
+            </div>
 
-            <li>
-                <a href="/predict">Predict</a>
-            </li>
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <div class="input-with-icon">
+                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <input type="password" id="password" name="password" class="form-input" 
+                           placeholder="At least 6 characters" minlength="6" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('password', this)">
+                        👁️
+                    </button>
+                </div>
+            </div>
 
-            <li>
-                <a href="/history">History</a>
-            </li>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password <span class="required">*</span></label>
+                <div class="input-with-icon">
+                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-input" 
+                           placeholder="Re-enter your password" minlength="6" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('confirm_password', this)">
+                        👁️
+                    </button>
+                </div>
+            </div>
 
-            <li>
-                <a href="/register">Register</a>
-            </li>
-
-        </ul>
-
-    </nav>
-
-
-    <!-- Register Section -->
-
-    <section class="prediction">
-
-        <h1>Create Account</h1>
-
-        <p>
-            Register to use SymptoScan.
-        </p>
-
-        <form action="/register" method="POST">
-          
-            {% if error %}
-
-            <p class="error-message">
-                {{ error }}
-            </p>
-
-            {% endif %}
-
-            <label for="name">
-                Full Name
-            </label>
-
-            <input type="text" id="name" name="name" placeholder="Enter your name" required>
-
-
-            <label for="email">
-                Email
-            </label>
-
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
-
-
-            <label for="password">
-                Password
-            </label>
-
-            <input type="password" id="password" name="password" placeholder="Create a password" required>
-
-
-            <button type="submit">
-                Create Account
+            <button type="submit" class="btn-auth-submit">
+                <span>Complete Registration</span>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
             </button>
-
         </form>
 
-    </section>
+        <div class="auth-footer">
+            <p>Already have an account? <a href="/login" class="auth-link">Sign In</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
-</body>
-
-</html>
+{% block scripts %}
+<script>
+function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🔒';
+    } else {
+        input.type = 'password';
+        btn.textContent = '👁️';
+    }
+}
+</script>
+{% endblock %}

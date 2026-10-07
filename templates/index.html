@@ -1,244 +1,253 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
+{% block title %}SymptoScan AI - AI-Powered Disease Prediction & Clinical Triage{% endblock %}
 
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>SymptoScan - AI Disease Prediction</title>
-
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
-
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
-
-</head>
-
-
-<body>
-
-
-    <!-- Navbar -->
-
-    <nav>
-
-        <div class="logo">
-            SymptoScan
-        </div>
-
-
-        <ul class="nav-links">
-
-            <li>
-                <a href="/">
-                    Home
-                </a>
-            </li>
-
-            <li>
-                <a href="/predict">
-                    Predict
-                </a>
-            </li>
-
-            <li>
-                <a href="/history">
-                    History
-                </a>
-            </li>
-
-            <li>
-                <a href="/register">
-                    Register
-                </a>
-            </li>
-
-            <li>
-                <a href="/login">
-                    Login
-                </a>
-            </li>
-
-        </ul>
-
-    </nav>
-
-
-
-    <!-- Hero Section -->
-
-    <section class="hero">
-
+{% block content %}
+<!-- ================= HERO SECTION ================= -->
+<section class="hero-section">
+    <div class="hero-container">
         <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                <span>AI Clinical Triage Assistant v2.0</span>
+            </div>
 
-            <p class="hero-label">
-                AI-POWERED HEALTH ASSISTANT
-            </p>
-
-
-            <h1>
-                Understand Your Symptoms
-                With AI
+            <h1 class="hero-title">
+                Understand Your Symptoms With <span class="gradient-text">Calibrated AI</span>
             </h1>
 
-
-            <p>
-                SymptoScan analyzes your selected symptoms
-                using an Artificial Intelligence model and
-                provides a possible health condition.
+            <p class="hero-description">
+                SymptoScan AI uses multi-class Machine Learning to evaluate your reported symptoms, provide ranked differential diagnoses, recommend medical specialists, and generate actionable health care plans in seconds.
             </p>
 
-
-            <div class="hero-buttons">
-
-                <a href="/predict" class="btn">
-                    Start Prediction
+            <div class="hero-actions">
+                <a href="/predict" class="btn-primary-lg">
+                    <span>Start Free Assessment</span>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
                 </a>
-
-
-                <a href="/register"
-                   class="btn secondary-btn">
-                    Create Account
+                <a href="#how-it-works" class="btn-secondary-lg">
+                    <span>Explore How It Works</span>
                 </a>
-
             </div>
 
-        </div>
-
-    </section>
-
-
-
-    <!-- Features Section -->
-
-    <section class="features">
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                🧠
+            <div class="hero-trust-metrics">
+                <div class="metric-item">
+                    <span class="metric-value">29+</span>
+                    <span class="metric-label">Health Conditions</span>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric-item">
+                    <span class="metric-value">30+</span>
+                    <span class="metric-label">Clinical Symptoms</span>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric-item">
+                    <span class="metric-value">91%+</span>
+                    <span class="metric-label">Model Accuracy</span>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric-item">
+                    <span class="metric-value">0.1s</span>
+                    <span class="metric-label">Instant Inference</span>
+                </div>
             </div>
-
-            <h2>
-                AI-Based Prediction
-            </h2>
-
-            <p>
-                Uses a machine learning model to analyze
-                selected symptoms.
-            </p>
-
         </div>
 
+        <!-- Interactive Hero Showcase Card -->
+        <div class="hero-visual">
+            <div class="clinical-preview-card">
+                <div class="preview-header">
+                    <div class="preview-tag">
+                        <span class="pulse-indicator"></span>
+                        <span>LIVE TRIAGE PREVIEW</span>
+                    </div>
+                    <span class="preview-timestamp">Updated Real-Time</span>
+                </div>
 
-        <div class="feature">
+                <div class="preview-symptoms-box">
+                    <div class="box-label">Reported Patient Symptoms:</div>
+                    <div class="preview-chips">
+                        <span class="symptom-chip active">High Fever</span>
+                        <span class="symptom-chip active">Chills & Shivering</span>
+                        <span class="symptom-chip active">Body Aches</span>
+                        <span class="symptom-chip active">Fatigue</span>
+                    </div>
+                </div>
 
-            <div class="feature-icon">
-                🔒
+                <div class="preview-result-box">
+                    <div class="result-top">
+                        <span class="result-label">Predicted Match:</span>
+                        <span class="urgency-pill pill-moderate">Moderate Severity</span>
+                    </div>
+                    <div class="result-disease">Influenza (Flu)</div>
+                    <div class="confidence-bar-wrapper">
+                        <div class="confidence-label">
+                            <span>Diagnostic Match Probability</span>
+                            <span class="bold">87.8%</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: 87.8%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-specialist">
+                    <div class="specialist-avatar">🩺</div>
+                    <div class="specialist-info">
+                        <strong>Recommended Specialist:</strong>
+                        <span>General Physician / Internal Medicine</span>
+                    </div>
+                </div>
+
+                <div class="preview-cta">
+                    <a href="/predict" class="btn-preview-action">Try Your Own Assessment →</a>
+                </div>
             </div>
-
-            <h2>
-                Personal History
-            </h2>
-
-            <p>
-                Registered users can securely view their
-                previous prediction records.
-            </p>
-
         </div>
+    </div>
+</section>
 
+<!-- ================= HOW IT WORKS ================= -->
+<section class="section-container" id="how-it-works">
+    <div class="section-header">
+        <span class="section-tag">CLINICAL WORKFLOW</span>
+        <h2 class="section-title">How SymptoScan AI Works</h2>
+        <p class="section-subtitle">A seamless 4-step process bridging symptom self-reporting with actionable medical triage.</p>
+    </div>
 
-        <div class="feature">
-
-            <div class="feature-icon">
-                ⚡
+    <div class="workflow-grid">
+        <div class="workflow-card">
+            <div class="step-badge">01</div>
+            <div class="workflow-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
             </div>
-
-            <h2>
-                Quick Results
-            </h2>
-
-            <p>
-                Enter symptoms and receive a possible
-                condition within seconds.
-            </p>
-
+            <h3>Select Your Symptoms</h3>
+            <p>Pick from 30+ categorized symptoms across respiratory, digestive, neurological, systemic, and dermatological domains with live search.</p>
         </div>
 
-    </section>
-
-
-
-    <!-- Information Section -->
-
-    <section class="home-info">
-
-        <div>
-
-            <p class="section-label">
-                ABOUT SYMPTOSCAN
-            </p>
-
-            <h2>
-                A Simple Approach to
-                Symptom Analysis
-            </h2>
-
-            <p>
-                SymptoScan is an educational AI-based
-                disease prediction project. Users can
-                enter basic information and select
-                symptoms to receive a possible condition
-                predicted by the trained machine learning
-                model.
-            </p>
-
+        <div class="workflow-card">
+            <div class="step-badge">02</div>
+            <div class="workflow-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="m4.93 4.93 4.24 4.24"></path>
+                    <path d="m14.83 9.17 4.24-4.24"></path>
+                    <path d="m14.83 14.83 4.24 4.24"></path>
+                    <path d="m9.17 14.83-4.24 4.24"></path>
+                    <circle cx="12" cy="12" r="4"></circle>
+                </svg>
+            </div>
+            <h3>Calibrated AI Inference</h3>
+            <p>Our Random Forest Calibrated model analyzes combinations, correlations, and symptom clusters to calculate precise match percentages.</p>
         </div>
 
-
-        <div class="home-info-note">
-
-            <h3>
-                Important
-            </h3>
-
-            <p>
-                SymptoScan is designed for educational
-                and demonstration purposes. It does not
-                replace professional medical advice,
-                diagnosis, or treatment.
-            </p>
-
+        <div class="workflow-card">
+            <div class="step-badge">03</div>
+            <div class="workflow-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+            </div>
+            <h3>Triage & Differentials</h3>
+            <p>Receive primary condition predictions along with secondary differential probabilities and color-coded clinical severity levels.</p>
         </div>
 
-    </section>
+        <div class="workflow-card">
+            <div class="step-badge">04</div>
+            <div class="workflow-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h3>Guidance & Printable Reports</h3>
+            <p>Get evidence-based precautions, nutrition guides, doctor routing, and export an official medical summary report for your doctor.</p>
+        </div>
+    </div>
+</section>
 
+<!-- ================= FEATURES GRID ================= -->
+<section class="section-container bg-subtle">
+    <div class="section-header">
+        <span class="section-tag">CORE CAPABILITIES</span>
+        <h2 class="section-title">Built for Modern Health Guidance</h2>
+        <p class="section-subtitle">Explore what sets SymptoScan AI apart as a comprehensive medical triage platform.</p>
+    </div>
 
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🧠</div>
+            <h3>Multi-Class Machine Learning</h3>
+            <p>Trained and calibrated across 29 distinct diseases to provide dependable probabilistic predictions rather than rigid rule checks.</p>
+        </div>
 
-    <!-- Footer -->
+        <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Differential Diagnoses</h3>
+            <p>Evaluates overlapping symptoms to reveal secondary possible conditions, simulating real medical differential diagnostics.</p>
+        </div>
 
-    <footer>
+        <div class="feature-card">
+            <div class="feature-icon">🚨</div>
+            <h3>Emergency Red-Flag Detection</h3>
+            <p>Automatically flags critical symptoms (severe chest pain, shortness of breath, meningitis signs) advising urgent emergency medical attention.</p>
+        </div>
 
-        <p>
-            © 2026 SymptoScan. All rights reserved.
-        </p>
+        <div class="feature-card">
+            <div class="feature-icon">👨‍⚕️</div>
+            <h3>Specialist Routing</h3>
+            <p>Connects predictions with recommended doctor types (Cardiologist, Pulmonologist, Neurologist, ENT, Gastroenterologist).</p>
+        </div>
 
-    </footer>
+        <div class="feature-card">
+            <div class="feature-icon">📄</div>
+            <h3>Printable Clinical Reports</h3>
+            <p>Export cleanly formatted medical summary reports with patient demographics, symptom checklists, and clinical notes for physician reviews.</p>
+        </div>
 
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Privacy First Architecture</h3>
+            <p>Password encryption, secure sessions, and flexible database options (SQLite / PostgreSQL / MySQL) ensure safe assessment logging.</p>
+        </div>
+    </div>
+</section>
 
-</body>
+<!-- ================= EMERGENCY ADVISORY ================= -->
+<section class="section-container">
+    <div class="emergency-banner-card" id="disclaimer">
+        <div class="emergency-icon-col">
+            <div class="alert-icon-circle">⚠️</div>
+        </div>
+        <div class="emergency-text-col">
+            <h3>Important Clinical Disclaimer</h3>
+            <p>
+                SymptoScan AI is designed solely for educational, informational, and triage guidance purposes. It is <strong>NOT a replacement for licensed medical diagnosis, clinical testing, or emergency medical treatment</strong>. If you or someone around you is suffering from severe chest pressure, sudden numbness or speech difficulty, heavy bleeding, or breathing distress, immediately dial emergency services (<strong>911 / 112 / 108</strong>) or head directly to the nearest hospital Emergency Room.
+            </p>
+        </div>
+    </div>
+</section>
 
-</html>
+<!-- ================= CALL TO ACTION ================= -->
+<section class="cta-section">
+    <div class="cta-card">
+        <h2>Ready to Check Your Health Symptoms?</h2>
+        <p>Start a quick, intelligent, and confidential symptom check powered by artificial intelligence.</p>
+        <div class="cta-actions">
+            <a href="/predict" class="btn-primary-lg">Start AI Assessment Now</a>
+            {% if not is_authenticated %}
+                <a href="/register" class="btn-secondary-lg">Create Free Account</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

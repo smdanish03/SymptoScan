@@ -1,0 +1,84 @@
+{
+  "symptoms": [
+    "High Fever",
+    "Mild Fever",
+    "Chills & Shivering",
+    "Fatigue & Weakness",
+    "Body Aches & Muscle Pain",
+    "Joint Pain & Swelling",
+    "Excessive Sweating",
+    "Unexplained Weight Loss",
+    "Dry Cough",
+    "Cough with Mucus",
+    "Shortness of Breath",
+    "Sore Throat",
+    "Runny or Stuffy Nose",
+    "Chest Tightness or Pain",
+    "Sneezing",
+    "Loss of Taste or Smell",
+    "Nausea",
+    "Vomiting",
+    "Diarrhea",
+    "Abdominal Cramps & Pain",
+    "Heartburn & Acid Reflux",
+    "Loss of Appetite",
+    "Abdominal Bloating",
+    "Severe Throbbing Headache",
+    "Dull or Tension Headache",
+    "Dizziness & Lightheadedness",
+    "Sensitivity to Light/Sound",
+    "Stiff Neck & Confusion",
+    "Itchy Skin Rash or Hives",
+    "Red or Watery Eyes",
+    "Burning Urination",
+    "Frequent Urination",
+    "Yellowing of Skin/Eyes (Jaundice)"
+  ],
+  "symptoms_catalog": {
+    "General & Systemic": [
+      "High Fever",
+      "Mild Fever",
+      "Chills & Shivering",
+      "Fatigue & Weakness",
+      "Body Aches & Muscle Pain",
+      "Joint Pain & Swelling",
+      "Excessive Sweating",
+      "Unexplained Weight Loss"
+    ],
+    "Respiratory & ENT": [
+      "Dry Cough",
+      "Cough with Mucus",
+      "Shortness of Breath",
+      "Sore Throat",
+      "Runny or Stuffy Nose",
+      "Chest Tightness or Pain",
+      "Sneezing",
+      "Loss of Taste or Smell"
+    ],
+    "Digestive & Gastrointestinal": [
+      "Nausea",
+      "Vomiting",
+      "Diarrhea",
+      "Abdominal Cramps & Pain",
+      "Heartburn & Acid Reflux",
+      "Loss of Appetite",
+      "Abdominal Bloating"
+    ],
+    "Neurological & Sensory": [
+      "Severe Throbbing Headache",
+      "Dull or Tension Headache",
+      "Dizziness & Lightheadedness",
+      "Sensitivity to Light/Sound",
+      "Stiff Neck & Confusion"
+    ],
+    "Skin, Eyes & Urinary": [
+      "Itchy Skin Rash or Hives",
+      "Red or Watery Eyes",
+      "Burning Urination",
+      "Frequent Urination",
+      "Yellowing of Skin/Eyes (Jaundice)"
+    ]
+  },
+  "disease_count": 29,
+  "accuracy": 0.9116379310344828
+}

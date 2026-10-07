@@ -1,3 +1,7 @@
+import os
+import re
+from datetime import datetime
+from dotenv import load_dotenv
 from flask import (
     Flask,
     render_template,
@@ -5,910 +9,622 @@ from flask import (
     session,
     redirect,
     url_for,
-    flash
+    flash,
+    jsonify,
+    abort
 )
-
-import pickle
-import mysql.connector
-from mysql.connector import Error
 from werkzeug.security import generate_password_hash, check_password_hash
-from dotenv import load_dotenv
 
-import os
-import re
-
+import database
+import medical_engine
 
 # =========================================================
-# LOAD ENVIRONMENT VARIABLES
+# APPLICATION SETUP
 # =========================================================
-
 load_dotenv()
 
-
-# =========================================================
-# FLASK APPLICATION
-# =========================================================
-
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY", "symptoscan-enterprise-secret-key-2026")
 
-app.secret_key = os.getenv("SECRET_KEY")
+# Initialize database tables on startup
+try:
+    database.init_db()
+except Exception as e:
+    print(f"[Warning] DB initialization error: {e}")
 
+# Context processor for global template variables
+@app.context_processor
+def inject_global_vars():
+    user_name = session.get("user_name")
+    user_id = session.get("user_id")
+    current_year = datetime.now().year
+    return {
+        "current_user_name": user_name,
+        "is_authenticated": bool(user_id),
+        "current_year": current_year,
+        "app_version": "2.0.0"
+    }
+
+@app.template_filter('format_datetime')
+def format_datetime(val, fmt="%Y-%m-%d"):
+    if not val:
+        return "N/A"
+    if hasattr(val, 'strftime'):
+        return val.strftime(fmt)
+    val_str = str(val)
+    return val_str[:16] if len(val_str) >= 16 else val_str
 
 # =========================================================
-# DATABASE CONNECTION
+# PUBLIC / MARKETING ROUTES
 # =========================================================
-
-def get_db_connection():
-
-    return mysql.connector.connect(
-        host=os.getenv("DB_HOST"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-        database=os.getenv("DB_NAME")
-    )
-
-
-# =========================================================
-# LOAD MACHINE LEARNING MODEL
-# =========================================================
-
-with open("models/disease_model.pkl", "rb") as file:
-    model = pickle.load(file)
-
-
-# =========================================================
-# HOME
-# =========================================================
-
 @app.route("/")
 def home():
-
-    return render_template("index.html")
-
-
-# =========================================================
-# REGISTER
-# =========================================================
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-
-    if request.method == "POST":
-
-        # -------------------------------------------------
-        # Get form data
-        # -------------------------------------------------
-
-        name = request.form.get("name", "").strip()
-
-        email = request.form.get(
-            "email",
-            ""
-        ).strip().lower()
-
-        password = request.form.get(
-            "password",
-            ""
-        )
-
-
-        # -------------------------------------------------
-        # Basic validation
-        # -------------------------------------------------
-
-        if not name or not email or not password:
-
-            flash(
-                "Please fill all fields.",
-                "error"
-            )
-
-            return redirect(
-                url_for("register")
-            )
-
-
-        # -------------------------------------------------
-        # Email validation
-        # -------------------------------------------------
-
-        email_pattern = (
-            r"^[A-Za-z0-9._%+-]+"
-            r"@[A-Za-z0-9.-]+\."
-            r"[A-Za-z]{2,}$"
-        )
-
-        if not re.match(
-            email_pattern,
-            email
-        ):
-
-            flash(
-                "Please enter a valid email address.",
-                "error"
-            )
-
-            return redirect(
-                url_for("register")
-            )
-
-
-        # -------------------------------------------------
-        # Password validation
-        # -------------------------------------------------
-
-        if len(password) < 6:
-
-            flash(
-                "Password must contain at least 6 characters.",
-                "error"
-            )
-
-            return redirect(
-                url_for("register")
-            )
-
-
-        db = None
-        cursor = None
-
-
-        try:
-
-            # -------------------------------------------------
-            # Connect to MySQL
-            # -------------------------------------------------
-
-            db = get_db_connection()
-
-            cursor = db.cursor()
-
-
-            # -------------------------------------------------
-            # Check existing email
-            # -------------------------------------------------
-
-            cursor.execute(
-                """
-                SELECT id
-                FROM users
-                WHERE email = %s
-                """,
-                (email,)
-            )
-
-            existing_user = cursor.fetchone()
-
-
-            if existing_user:
-
-                flash(
-                    "This email is already registered.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for("register")
-                )
-
-
-            # -------------------------------------------------
-            # Hash password
-            # -------------------------------------------------
-
-            hashed_password = generate_password_hash(
-                password
-            )
-
-
-            # -------------------------------------------------
-            # Insert user
-            # -------------------------------------------------
-
-            cursor.execute(
-                """
-                INSERT INTO users
-                (name, email, password)
-                VALUES (%s, %s, %s)
-                """,
-                (
-                    name,
-                    email,
-                    hashed_password
-                )
-            )
-
-
-            db.commit()
-
-
-            # -------------------------------------------------
-            # Success message
-            # -------------------------------------------------
-
-            flash(
-                "Registration successful! You can now login.",
-                "success"
-            )
-
-            return redirect(
-                url_for("login")
-            )
-
-
-        except Error as e:
-
-            print(
-                "Registration error:",
-                e
-            )
-
-            if db:
-                db.rollback()
-
-            flash(
-                "Registration failed. Please try again.",
-                "error"
-            )
-
-            return redirect(
-                url_for("register")
-            )
-
-
-        finally:
-
-            if cursor:
-                cursor.close()
-
-            if db:
-                db.close()
-
-
+    """Modern landing page with live interactive demonstration."""
+    catalog, all_symptoms = medical_engine.get_symptom_catalog()
     return render_template(
-        "register.html"
+        "index.html",
+        catalog=catalog,
+        sample_symptoms=all_symptoms[:12]
     )
 
+@app.route("/health")
+def health_check():
+    """Health check endpoint for Render / cloud monitoring."""
+    return jsonify({
+        "status": "healthy",
+        "service": "SymptoScan AI",
+        "version": "2.0.0",
+        "timestamp": datetime.utcnow().isoformat()
+    }), 200
 
 # =========================================================
-# LOGIN
+# AUTHENTICATION
 # =========================================================
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """User registration with rigorous validation and instant login."""
+    if session.get("user_id"):
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        # Form validations
+        if not name or not email or not password:
+            flash("Please fill in all required fields.", "error")
+            return redirect(url_for("register"))
+
+        email_pattern = r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+        if not re.match(email_pattern, email):
+            flash("Please enter a valid email address.", "error")
+            return redirect(url_for("register"))
+
+        if len(password) < 6:
+            flash("Password must be at least 6 characters long.", "error")
+            return redirect(url_for("register"))
+
+        if confirm_password and password != confirm_password:
+            flash("Passwords do not match.", "error")
+            return redirect(url_for("register"))
+
+        # Check existing email
+        existing_user = database.query_one(
+            "SELECT id FROM users WHERE email = %s", (email,)
+        )
+        if existing_user:
+            flash("This email address is already registered. Please log in.", "error")
+            return redirect(url_for("login"))
+
+        # Hash password and insert
+        hashed_password = generate_password_hash(password)
+        try:
+            user_id = database.execute_query(
+                "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)",
+                (name, email, hashed_password)
+            )
+
+            flash(f"🎉 Account created successfully! Welcome, {name}. Please sign in with your password.", "success")
+            return redirect(url_for("login", registered="1", email=email, name=name))
+        except Exception as e:
+            print("Registration error:", e)
+            flash("Unable to complete registration. Please try again.", "error")
+            return redirect(url_for("register"))
+
+    return render_template("register.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """Secure user login with session initialization."""
+    if session.get("user_id"):
+        return redirect(url_for("dashboard"))
 
     if request.method == "POST":
-
-        email = request.form.get(
-            "email",
-            ""
-        ).strip().lower()
-
-        password = request.form.get(
-            "password",
-            ""
-        )
-
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
 
         if not email or not password:
-
-            flash(
-                "Please enter email and password.",
-                "error"
-            )
-
-            return redirect(
-                url_for("login")
-            )
-
-
-        db = None
-        cursor = None
-
+            flash("Please enter both email and password.", "error")
+            return redirect(url_for("login"))
 
         try:
-
-            # -------------------------------------------------
-            # Connect to database
-            # -------------------------------------------------
-
-            db = get_db_connection()
-
-            cursor = db.cursor(
-                dictionary=True
-            )
-
-
-            # -------------------------------------------------
-            # Find user
-            # -------------------------------------------------
-
-            cursor.execute(
-                """
-                SELECT id, name, email, password
-                FROM users
-                WHERE email = %s
-                """,
+            user = database.query_one(
+                "SELECT id, name, email, password FROM users WHERE email = %s",
                 (email,)
             )
 
-
-            user = cursor.fetchone()
-
-
-            # -------------------------------------------------
-            # Verify password
-            # -------------------------------------------------
-
-            if user and check_password_hash(
-                user["password"],
-                password
-            ):
-
+            if user and check_password_hash(user["password"], password):
                 session["user_id"] = user["id"]
-
                 session["user_name"] = user["name"]
+                session["user_email"] = user["email"]
+                flash(f"Welcome back, {user['name']}!", "success")
+                next_url = request.args.get("next")
+                return redirect(next_url or url_for("dashboard"))
 
-                return redirect(
-                    url_for("dashboard")
-                )
+            flash("Invalid email or password. Please try again.", "error")
+            return redirect(url_for("login"))
 
+        except Exception as e:
+            print("Login error:", e)
+            flash("Service temporarily unavailable. Please try again.", "error")
+            return redirect(url_for("login"))
 
-            flash(
-                "Invalid email or password.",
-                "error"
-            )
+    return render_template("login.html")
 
-            return redirect(
-                url_for("login")
-            )
-
-
-        except Error as e:
-
-            print(
-                "Login error:",
-                e
-            )
-
-            flash(
-                "Unable to connect to the database.",
-                "error"
-            )
-
-            return redirect(
-                url_for("login")
-            )
-
-
-        finally:
-
-            if cursor:
-                cursor.close()
-
-            if db:
-                db.close()
-
-
-    return render_template(
-        "login.html"
-    )
-
+@app.route("/logout")
+def logout():
+    """Logs out user and clears session."""
+    session.clear()
+    flash("You have been signed out safely.", "info")
+    return redirect(url_for("login"))
 
 # =========================================================
 # DASHBOARD
 # =========================================================
-
 @app.route("/dashboard")
 def dashboard():
-
-    # -------------------------------------------------
-    # Login required
-    # -------------------------------------------------
-
+    """Central analytics dashboard showing past predictions and clinical stats."""
     if "user_id" not in session:
+        flash("Please log in to access your health dashboard.", "warning")
+        return redirect(url_for("login", next=request.path))
 
-        return redirect(
-            url_for("login")
-        )
-
-
-    db = None
-    cursor = None
-
+    user_id = session["user_id"]
 
     try:
-
-        db = get_db_connection()
-
-        cursor = db.cursor(
-            dictionary=True
+        # User statistics
+        total_predictions_row = database.query_one(
+            "SELECT COUNT(*) AS total FROM predictions WHERE user_id = %s",
+            (user_id,)
         )
+        total_predictions = total_predictions_row["total"] if total_predictions_row else 0
 
-
-        # -------------------------------------------------
-        # Total predictions
-        # -------------------------------------------------
-
-        cursor.execute(
+        # Latest assessment
+        latest_prediction = database.query_one(
             """
-            SELECT COUNT(*) AS total_predictions
-            FROM predictions
-            WHERE user_id = %s
-            """,
-            (session["user_id"],)
-        )
-
-
-        total_result = cursor.fetchone()
-
-        total_predictions = (
-            total_result["total_predictions"]
-        )
-
-
-        # -------------------------------------------------
-        # Latest prediction
-        # -------------------------------------------------
-
-        cursor.execute(
-            """
-            SELECT disease, created_at
+            SELECT id, name, disease, confidence, severity, specialist, created_at
             FROM predictions
             WHERE user_id = %s
             ORDER BY created_at DESC
             LIMIT 1
             """,
-            (session["user_id"],)
+            (user_id,)
         )
 
+        # Recent 5 assessments
+        recent_predictions = database.query_all(
+            """
+            SELECT id, name, age, gender, symptoms, disease, confidence, severity, specialist, created_at
+            FROM predictions
+            WHERE user_id = %s
+            ORDER BY created_at DESC
+            LIMIT 5
+            """,
+            (user_id,)
+        )
 
-        latest_prediction = cursor.fetchone()
-
+        # Severity breakdown
+        severity_counts = {
+            "Mild": 0,
+            "Moderate": 0,
+            "High": 0,
+            "Critical": 0
+        }
+        all_user_preds = database.query_all(
+            "SELECT severity FROM predictions WHERE user_id = %s", (user_id,)
+        )
+        for p in all_user_preds:
+            sev = p.get("severity", "Moderate")
+            if "critical" in sev.lower() or "emergency" in sev.lower():
+                severity_counts["Critical"] += 1
+            elif "high" in sev.lower():
+                severity_counts["High"] += 1
+            elif "mild" in sev.lower():
+                severity_counts["Mild"] += 1
+            else:
+                severity_counts["Moderate"] += 1
 
         return render_template(
             "dashboard.html",
-            name=session["user_name"],
+            name=session.get("user_name"),
             total_predictions=total_predictions,
-            latest_prediction=latest_prediction
+            latest_prediction=latest_prediction,
+            recent_predictions=recent_predictions,
+            severity_counts=severity_counts
         )
 
-
-    except Error as e:
-
-        print(
-            "Dashboard error:",
-            e
+    except Exception as e:
+        print("Dashboard error:", e)
+        flash("Unable to load dashboard data.", "error")
+        return render_template(
+            "dashboard.html",
+            name=session.get("user_name"),
+            total_predictions=0,
+            latest_prediction=None,
+            recent_predictions=[],
+            severity_counts={"Mild": 0, "Moderate": 0, "High": 0, "Critical": 0}
         )
-
-        flash(
-            "Unable to load dashboard.",
-            "error"
-        )
-
-        return redirect(
-            url_for("login")
-        )
-
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if db:
-            db.close()
-
 
 # =========================================================
-# PREDICTION
+# PREDICTION & TRIAGE
 # =========================================================
-
-@app.route(
-    "/predict",
-    methods=["GET", "POST"]
-)
+@app.route("/predict", methods=["GET", "POST"])
 def predict():
-
-    # -------------------------------------------------
-    # Login required
-    # -------------------------------------------------
-
-    if "user_id" not in session:
-
-        return redirect(
-            url_for("login")
-        )
-
+    """Interactive multi-category symptom assessment form."""
+    catalog, all_symptoms = medical_engine.get_symptom_catalog()
 
     if request.method == "POST":
+        # Form fields
+        name = request.form.get("name", "").strip()
+        age_str = request.form.get("age", "").strip()
+        gender = request.form.get("gender", "").strip()
+        duration = request.form.get("duration", "").strip()
+        severity_level = request.form.get("severity_level", "").strip()
+        temperature = request.form.get("temperature", "").strip()
+        user_notes = request.form.get("notes", "").strip()
+        symptoms = request.form.getlist("symptoms")
 
-        # -------------------------------------------------
-        # Get form data
-        # -------------------------------------------------
+        # Compile rich clinical notes
+        clinical_notes_parts = []
+        if duration:
+            clinical_notes_parts.append(f"Duration: {duration}")
+        if severity_level:
+            clinical_notes_parts.append(f"Severity: {severity_level}")
+        if temperature:
+            clinical_notes_parts.append(f"Temp: {temperature}")
+        if user_notes:
+            clinical_notes_parts.append(user_notes)
+        notes = " • ".join(clinical_notes_parts)
 
-        name = request.form.get(
-            "name",
-            ""
-        ).strip()
-
-
-        age = request.form.get(
-            "age",
-            ""
-        ).strip()
-
-
-        gender = request.form.get(
-            "gender",
-            ""
-        ).strip()
-
-
-        symptoms = request.form.getlist(
-            "symptoms"
-        )
-
-
-        # -------------------------------------------------
-        # Validate name
-        # -------------------------------------------------
-
+        # Fallback to session user name if patient name empty
         if not name:
+            name = session.get("user_name", "Patient")
 
-            flash(
-                "Please enter your name.",
-                "error"
-            )
-
-            return redirect(
-                url_for("predict")
-            )
-
-
-        # -------------------------------------------------
         # Validate age
-        # -------------------------------------------------
-
-        if not age:
-
-            flash(
-                "Please enter your age.",
-                "error"
-            )
-
-            return redirect(
-                url_for("predict")
-            )
-
-
         try:
-
-            age = int(age)
-
+            age = int(age_str)
+            if age < 1 or age > 120:
+                flash("Please enter a realistic age between 1 and 120.", "error")
+                return render_template("predict.html", catalog=catalog, all_symptoms=all_symptoms)
         except ValueError:
-
-            flash(
-                "Age must be a valid number.",
-                "error"
-            )
-
-            return redirect(
-                url_for("predict")
-            )
-
-
-        if age < 1 or age > 120:
-
-            flash(
-                "Please enter a valid age between 1 and 120.",
-                "error"
-            )
-
-            return redirect(
-                url_for("predict")
-            )
-
-
-        # -------------------------------------------------
-        # Validate gender
-        # -------------------------------------------------
+            flash("Please enter a valid numeric age.", "error")
+            return render_template("predict.html", catalog=catalog, all_symptoms=all_symptoms)
 
         if not gender:
-
-            flash(
-                "Please select your gender.",
-                "error"
-            )
-
-            return redirect(
-                url_for("predict")
-            )
-
-
-        # -------------------------------------------------
-        # Validate symptoms
-        # -------------------------------------------------
+            flash("Please select patient gender.", "error")
+            return render_template("predict.html", catalog=catalog, all_symptoms=all_symptoms)
 
         if not symptoms:
+            flash("Please select at least one symptom to evaluate.", "error")
+            return render_template("predict.html", catalog=catalog, all_symptoms=all_symptoms)
 
-            flash(
-                "Please select at least one symptom.",
-                "error"
-            )
-
-            return redirect(
-                url_for("predict")
-            )
-
-
-        # -------------------------------------------------
-        # Convert symptoms to model values
-        # -------------------------------------------------
-
-        fever = (
-            1 if "Fever" in symptoms else 0
-        )
-
-        cough = (
-            1 if "Cough" in symptoms else 0
-        )
-
-        headache = (
-            1 if "Headache" in symptoms else 0
-        )
-
-        vomiting = (
-            1 if "Vomiting" in symptoms else 0
-        )
-
-        fatigue = (
-            1 if "Fatigue" in symptoms else 0
-        )
-
-        bodypain = (
-            1 if "Body Pain" in symptoms else 0
-        )
-
-
-        # -------------------------------------------------
-        # AI prediction
-        # -------------------------------------------------
-
+        # Run AI prediction
         try:
+            result = medical_engine.predict_condition(symptoms)
+            if "error" in result:
+                flash(result["error"], "error")
+                return render_template("predict.html", catalog=catalog, all_symptoms=all_symptoms)
 
-            prediction = model.predict(
-                [[
-                    fever,
-                    cough,
-                    headache,
-                    vomiting,
-                    fatigue,
-                    bodypain
-                ]]
-            )
+            disease = result["disease"]
+            confidence = result["confidence"]
+            severity = result["severity"]
+            specialist = result["specialist"]
 
-            disease = str(
-                prediction[0]
-            )
+            # Save prediction to DB if logged in or fallback
+            user_id = session.get("user_id")
+            prediction_id = None
 
+            try:
+                prediction_id = database.execute_query(
+                    """
+                    INSERT INTO predictions
+                    (user_id, name, age, gender, symptoms, disease, confidence, severity, specialist, notes)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """,
+                    (
+                        user_id,
+                        name,
+                        age,
+                        gender,
+                        ", ".join(symptoms),
+                        disease,
+                        confidence,
+                        severity,
+                        specialist,
+                        notes
+                    )
+                )
+            except Exception as dbe:
+                print("Database save error:", dbe)
+
+            # Store result in session or redirect to result page
+            session["last_result"] = {
+                "id": prediction_id,
+                "name": name,
+                "age": age,
+                "gender": gender,
+                "notes": notes,
+                "symptoms": symptoms,
+                "created_at": datetime.now().strftime("%B %d, %Y - %I:%M %p"),
+                **result
+            }
+
+            if prediction_id:
+                return redirect(url_for("view_result", prediction_id=prediction_id))
+            return redirect(url_for("view_last_result"))
 
         except Exception as e:
-
-            print(
-                "Prediction error:",
-                e
-            )
-
-            flash(
-                "Unable to make prediction.",
-                "error"
-            )
-
-            return redirect(
-                url_for("predict")
-            )
-
-
-        # -------------------------------------------------
-        # Save prediction
-        # -------------------------------------------------
-
-        db = None
-        cursor = None
-
-
-        try:
-
-            db = get_db_connection()
-
-            cursor = db.cursor()
-
-
-            cursor.execute(
-                """
-                INSERT INTO predictions
-                (
-                    name,
-                    age,
-                    gender,
-                    symptoms,
-                    disease,
-                    user_id
-                )
-                VALUES (%s, %s, %s, %s, %s, %s)
-                """,
-                (
-                    name,
-                    age,
-                    gender,
-                    ", ".join(symptoms),
-                    disease,
-                    session["user_id"]
-                )
-            )
-
-
-            db.commit()
-
-
-        except Error as e:
-
-            print(
-                "Prediction database error:",
-                e
-            )
-
-            if db:
-                db.rollback()
-
-            flash(
-                "Prediction was made but could not be saved.",
-                "error"
-            )
-
-            return redirect(
-                url_for("predict")
-            )
-
-
-        finally:
-
-            if cursor:
-                cursor.close()
-
-            if db:
-                db.close()
-
-
-        # -------------------------------------------------
-        # Show prediction result
-        # -------------------------------------------------
-
-        return render_template(
-            "result.html",
-            disease=disease,
-            name=name,
-            age=age,
-            gender=gender
-        )
-
+            print("Prediction error:", e)
+            flash("Unable to complete AI assessment at this moment. Please try again.", "error")
+            return render_template("predict.html", catalog=catalog, all_symptoms=all_symptoms)
 
     return render_template(
-        "predict.html"
+        "predict.html",
+        catalog=catalog,
+        all_symptoms=all_symptoms,
+        default_name=session.get("user_name", "")
     )
 
+@app.route("/result/<int:prediction_id>")
+def view_result(prediction_id):
+    """Displays detailed clinical diagnostic result by prediction ID."""
+    pred = database.query_one(
+        """
+        SELECT id, user_id, name, age, gender, symptoms, disease, confidence, severity, specialist, notes, created_at
+        FROM predictions
+        WHERE id = %s
+        """,
+        (prediction_id,)
+    )
+
+    if not pred:
+        flash("Assessment record not found.", "error")
+        return redirect(url_for("dashboard"))
+
+    # Reconstitute knowledge base details
+    profile = medical_engine.get_disease_profile(pred["disease"])
+    symptom_list = [s.strip() for s in pred["symptoms"].split(",") if s.strip()]
+    
+    # Try getting differential diagnoses if symptoms exist
+    differentials = []
+    try:
+        calc_result = medical_engine.predict_condition(symptom_list)
+        if "differentials" in calc_result:
+            differentials = calc_result["differentials"]
+    except Exception:
+        pass
+
+    result_data = {
+        "id": pred["id"],
+        "name": pred["name"],
+        "age": pred["age"],
+        "gender": pred["gender"],
+        "notes": pred.get("notes", ""),
+        "disease": pred["disease"],
+        "confidence": pred["confidence"] or 88.0,
+        "severity": pred["severity"] or profile.get("severity", "Moderate"),
+        "severity_class": profile.get("severity_class", "info"),
+        "specialist": pred["specialist"] or profile.get("specialist", "General Physician"),
+        "category": profile.get("category", "General Medicine"),
+        "description": profile.get("description", ""),
+        "precautions": profile.get("precautions", []),
+        "diet_advice": profile.get("diet_advice", ""),
+        "emergency_alert": profile.get("emergency_alert", ""),
+        "differentials": differentials,
+        "selected_symptoms": symptom_list,
+        "created_at": pred["created_at"]
+    }
+
+    return render_template("result.html", **result_data)
+
+@app.route("/result/latest")
+def view_last_result():
+    """Displays most recently computed result from session."""
+    result_data = session.get("last_result")
+    if not result_data:
+        flash("No recent assessment found.", "info")
+        return redirect(url_for("predict"))
+    return render_template("result.html", **result_data)
+
+@app.route("/report/<int:prediction_id>")
+def print_report(prediction_id):
+    """Printable / PDF-friendly clean medical report view."""
+    pred = database.query_one(
+        """
+        SELECT id, user_id, name, age, gender, symptoms, disease, confidence, severity, specialist, notes, created_at
+        FROM predictions
+        WHERE id = %s
+        """,
+        (prediction_id,)
+    )
+
+    if not pred:
+        flash("Assessment record not found.", "error")
+        return redirect(url_for("dashboard"))
+
+    profile = medical_engine.get_disease_profile(pred["disease"])
+    symptom_list = [s.strip() for s in pred["symptoms"].split(",") if s.strip()]
+    
+    differentials = []
+    try:
+        calc_result = medical_engine.predict_condition(symptom_list)
+        if "differentials" in calc_result:
+            differentials = calc_result["differentials"]
+    except Exception:
+        pass
+
+    meta = {
+        **profile,
+        "differentials": differentials,
+        "confidence": pred.get("confidence", 88.0)
+    }
+
+    return render_template(
+        "report.html",
+        pred=pred,
+        meta=meta,
+        symptom_list=symptom_list,
+        printed_at=datetime.now().strftime("%B %d, %Y at %I:%M %p")
+    )
 
 # =========================================================
-# HISTORY
+# HISTORY & MANAGEMENT
 # =========================================================
-
 @app.route("/history")
 def history():
-
-    # -------------------------------------------------
-    # Login required
-    # -------------------------------------------------
-
+    """Complete history of user predictions with search and filtering."""
     if "user_id" not in session:
+        flash("Please log in to view your assessment history.", "warning")
+        return redirect(url_for("login", next=request.path))
 
-        return redirect(
-            url_for("login")
-        )
+    user_id = session["user_id"]
+    search_query = request.args.get("q", "").strip()
 
-
-    db = None
-    cursor = None
-
-
-    try:
-
-        db = get_db_connection()
-
-        cursor = db.cursor(
-            dictionary=True
-        )
-
-
-        cursor.execute(
+    if search_query:
+        predictions = database.query_all(
             """
-            SELECT
-                id,
-                name,
-                age,
-                gender,
-                symptoms,
-                disease,
-                created_at
+            SELECT id, name, age, gender, symptoms, disease, confidence, severity, specialist, created_at
+            FROM predictions
+            WHERE user_id = %s AND (disease LIKE %s OR name LIKE %s OR symptoms LIKE %s)
+            ORDER BY created_at DESC
+            """,
+            (user_id, f"%{search_query}%", f"%{search_query}%", f"%{search_query}%")
+        )
+    else:
+        predictions = database.query_all(
+            """
+            SELECT id, name, age, gender, symptoms, disease, confidence, severity, specialist, created_at
             FROM predictions
             WHERE user_id = %s
             ORDER BY created_at DESC
             """,
-            (session["user_id"],)
+            (user_id,)
         )
 
-
-        predictions = cursor.fetchall()
-
-
-        return render_template(
-            "history.html",
-            predictions=predictions
-        )
-
-
-    except Error as e:
-
-        print(
-            "History error:",
-            e
-        )
-
-        flash(
-            "Unable to load prediction history.",
-            "error"
-        )
-
-        return redirect(
-            url_for("dashboard")
-        )
-
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if db:
-            db.close()
-
-
-# =========================================================
-# LOGOUT
-# =========================================================
-
-@app.route("/logout")
-def logout():
-
-    session.clear()
-
-    flash(
-        "You have been logged out successfully.",
-        "success"
+    return render_template(
+        "history.html",
+        predictions=predictions,
+        search_query=search_query
     )
 
-    return redirect(
-        url_for("login")
-    )
+@app.route("/history/delete/<int:prediction_id>", methods=["POST"])
+def delete_prediction(prediction_id):
+    """Deletes an assessment record belonging to the current user."""
+    if "user_id" not in session:
+        flash("Authentication required.", "error")
+        return redirect(url_for("login"))
+
+    user_id = session["user_id"]
+    try:
+        database.execute_query(
+            "DELETE FROM predictions WHERE id = %s AND user_id = %s",
+            (prediction_id, user_id)
+        )
+        flash("Record deleted successfully.", "success")
+    except Exception as e:
+        print("Delete error:", e)
+        flash("Could not delete record.", "error")
+
+    return redirect(url_for("history"))
 
 # =========================================================
-# RUN APPLICATION
+# INTERACTIVE REST APIs
 # =========================================================
+@app.route("/api/symptoms", methods=["GET"])
+def api_symptoms():
+    """Returns categorized symptoms list in JSON format."""
+    catalog, all_symptoms = medical_engine.get_symptom_catalog()
+    return jsonify({
+        "status": "success",
+        "catalog": catalog,
+        "symptoms": all_symptoms,
+        "total": len(all_symptoms)
+    })
 
+@app.route("/api/predict", methods=["POST"])
+def api_predict():
+    """Headless REST API for AI disease prediction."""
+    data = request.get_json(silent=True) or request.form
+    symptoms = data.get("symptoms", [])
+
+    if isinstance(symptoms, str):
+        symptoms = [s.strip() for s in symptoms.split(",") if s.strip()]
+
+    if not symptoms:
+        return jsonify({
+            "status": "error",
+            "message": "Symptoms list cannot be empty."
+        }), 400
+
+    try:
+        result = medical_engine.predict_condition(symptoms)
+        return jsonify({
+            "status": "success",
+            "result": result
+        })
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+@app.route("/api/assistant-chat", methods=["POST"])
+def api_assistant():
+    """Interactive Symptom Triage Chatbot."""
+    data = request.get_json(silent=True) or {}
+    message = data.get("message", "").strip()
+
+    if not message:
+        return jsonify({"reply": "Please describe your symptom or health question."})
+
+    response = medical_engine.quick_assistant_reply(message)
+    return jsonify(response)
+
+# =========================================================
+# ERROR HANDLERS
+# =========================================================
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template(
+        "index.html",
+        flash_error="The requested page was not found."
+    ), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template(
+        "index.html",
+        flash_error="An unexpected server error occurred. Our team has been notified."
+    ), 500
+
+# =========================================================
+# LOCAL EXECUTION
+# =========================================================
 if __name__ == "__main__":
-
+    port = int(os.environ.get("PORT", 5000))
     app.run(
         debug=True,
-        host="127.0.0.1",
-        port=5000
+        host="0.0.0.0",
+        port=port
     )

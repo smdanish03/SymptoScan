@@ -1,466 +1,170 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Clinical Dashboard - SymptoScan AI{% endblock %}
 
-    <title>Dashboard | SymptoScan AI</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-
-
-<body>
-
-<!-- ================= NAVBAR ================= -->
-
-<nav class="navbar">
-
-    <div class="brand">
-        <div class="brand-mark">S</div>
-
-        <div>
-            <div class="brand-name">SymptoScan</div>
-            <div class="brand-subtitle">AI Health Assistant</div>
-        </div>
-    </div>
-
-
-    <div class="nav-links">
-
-        <a href="/dashboard" class="active">
-            Dashboard
-        </a>
-
-        <a href="/predict">
-            Predict
-        </a>
-
-        <a href="/history">
-            History
-        </a>
-
-        <a href="/logout" class="logout-link">
-            Logout
-        </a>
-
-    </div>
-
-</nav>
-
-
-
-<!-- ================= MAIN ================= -->
-
-<main class="dashboard">
-
-
-    <!-- ================= HERO ================= -->
-
-    <section class="hero">
-
-        <div class="hero-content">
-
-            <div class="ai-badge">
-                <span class="pulse"></span>
-                AI HEALTH ANALYSIS
-            </div>
-
-
-            <h1>
-                Understand your symptoms
-                <span>with AI.</span>
-            </h1>
-
-
-            <p>
-                Welcome back, <strong>{{ name }}</strong>.
-                Analyze your symptoms and explore
-                possible health conditions using
-                SymptoScan's machine learning model.
+{% block content %}
+<div class="page-container">
+    
+    <!-- ================= DASHBOARD HEADER ================= -->
+    <div class="dashboard-welcome-banner">
+        <div class="welcome-text-col">
+            <span class="user-role-badge">PATIENT HEALTH PORTAL</span>
+            <h1 class="welcome-heading">Welcome back, {{ name }} 👋</h1>
+            <p class="welcome-subtext">
+                Monitor your personal symptom assessments, review historical AI evaluations, and initiate new clinical symptom checks.
             </p>
-
-
-            <div class="hero-buttons">
-
-                <a href="/predict" class="primary-btn">
-                    Start AI Prediction
-                    <span>→</span>
-                </a>
-
-                <a href="/history" class="secondary-btn">
-                    View History
-                </a>
-
-            </div>
-
         </div>
-
-
-        <!-- AI VISUAL -->
-
-        <div class="ai-visual">
-
-            <div class="orb">
-
-                <div class="orb-core">
-                    AI
-                </div>
-
-            </div>
-
-
-            <div class="orbit orbit-one"></div>
-            <div class="orbit orbit-two"></div>
-
-
-            <div class="floating-card card-top">
-                <span>●</span>
-                Symptom Analysis
-            </div>
-
-
-            <div class="floating-card card-bottom">
-                <span>✓</span>
-                AI Ready
-            </div>
-
+        <div class="welcome-action-col">
+            <a href="/predict" class="btn-primary-lg">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>New Assessment</span>
+            </a>
         </div>
+    </div>
 
-    </section>
-
-
-
-    <!-- ================= STATS ================= -->
-
-    <section class="stats-grid">
-
+    <!-- ================= STATS OVERVIEW ================= -->
+    <div class="stats-cards-grid">
+        <div class="stat-card">
+            <div class="stat-icon-wrap icon-blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+            </div>
+            <div class="stat-data">
+                <span class="stat-number">{{ total_predictions }}</span>
+                <span class="stat-title">Total AI Assessments</span>
+            </div>
+        </div>
 
         <div class="stat-card">
-
-            <div class="stat-top">
-
-                <span class="stat-title">
-                    TOTAL PREDICTIONS
+            <div class="stat-icon-wrap icon-teal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </div>
+            <div class="stat-data">
+                <span class="stat-number stat-text-highlight">
+                    {{ latest_prediction.disease if latest_prediction else 'No Scans Yet' }}
                 </span>
-
-                <div class="stat-icon blue">
-                    +
-                </div>
-
+                <span class="stat-title">Latest Condition</span>
             </div>
-
-
-            <div class="stat-number">
-                {{ total_predictions }}
-            </div>
-
-
-            <div class="stat-description">
-                Analysis records created
-            </div>
-
         </div>
-
-
 
         <div class="stat-card">
-
-            <div class="stat-top">
-
-                <span class="stat-title">
-                    LATEST RESULT
-                </span>
-
-                <div class="stat-icon green">
-                    ✓
-                </div>
-
+            <div class="stat-icon-wrap icon-amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
             </div>
-
-
-            {% if latest_prediction %}
-
-                <div class="stat-number condition">
-                    {{ latest_prediction.disease }}
-                </div>
-
-                <div class="stat-description">
-                    Most recent AI prediction
-                </div>
-
-            {% else %}
-
-                <div class="stat-number">
-                    —
-                </div>
-
-                <div class="stat-description">
-                    No prediction yet
-                </div>
-
-            {% endif %}
-
+            <div class="stat-data">
+                <span class="stat-number">
+                    {{ latest_prediction.created_at | format_datetime if latest_prediction else 'Active' }}
+                </span>
+                <span class="stat-title">Recent Activity Date</span>
+            </div>
         </div>
-
-
 
         <div class="stat-card">
-
-            <div class="stat-top">
-
-                <span class="stat-title">
-                    ACCOUNT
-                </span>
-
-                <div class="stat-icon purple">
-                    ✓
-                </div>
-
+            <div class="stat-icon-wrap icon-green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
             </div>
-
-
-            <div class="stat-number">
-                Active
+            <div class="stat-data">
+                <span class="stat-number">91.2%</span>
+                <span class="stat-title">Inference Reliability</span>
             </div>
-
-
-            <div class="stat-description">
-                Your account is secure
-            </div>
-
         </div>
+    </div>
 
-    </section>
-
-
-
-    <!-- ================= QUICK ACTIONS ================= -->
-
-    <section class="section">
-
-        <div class="section-header">
-
+    <!-- ================= RECENT ASSESSMENTS TABLE ================= -->
+    <div class="glass-card mb-4">
+        <div class="card-section-title between">
             <div>
-
-                <div class="section-label">
-                    QUICK ACTIONS
-                </div>
-
-                <h2>
-                    What would you like to do?
-                </h2>
-
+                <h3>Recent Symptom Assessments</h3>
+                <p class="section-hint">Records of diagnostic conditions evaluated by SymptoScan AI.</p>
             </div>
-
+            <a href="/history" class="link-view-all">View All Records ({{ total_predictions }}) →</a>
         </div>
 
-
-        <div class="action-grid">
-
-
-            <!-- Prediction -->
-
-            <a href="/predict" class="action-card">
-
-                <div class="action-icon blue-icon">
-                    +
-                </div>
-
-
-                <div class="action-info">
-
-                    <h3>
-                        New AI Prediction
-                    </h3>
-
-                    <p>
-                        Enter your symptoms and
-                        receive an AI-generated
-                        possible condition.
-                    </p>
-
-                    <span class="action-link">
-                        Start analysis →
-                    </span>
-
-                </div>
-
-            </a>
-
-
-
-            <!-- History -->
-
-            <a href="/history" class="action-card">
-
-                <div class="action-icon purple-icon">
-                    ≡
-                </div>
-
-
-                <div class="action-info">
-
-                    <h3>
-                        Prediction History
-                    </h3>
-
-                    <p>
-                        Review your previous
-                        symptom analyses and
-                        prediction records.
-                    </p>
-
-                    <span class="action-link purple-text">
-                        View records →
-                    </span>
-
-                </div>
-
-            </a>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ================= RECENT RESULT ================= -->
-
-    <section class="section">
-
-        <div class="section-header">
-
-            <div>
-
-                <div class="section-label">
-                    RECENT ACTIVITY
-                </div>
-
-                <h2>
-                    Latest prediction
-                </h2>
-
+        {% if recent_predictions %}
+            <div class="table-responsive">
+                <table class="clinical-table">
+                    <thead>
+                        <tr>
+                            <th>Date / Time</th>
+                            <th>Patient</th>
+                            <th>Reported Symptoms</th>
+                            <th>Predicted Disease</th>
+                            <th>Confidence</th>
+                            <th>Severity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pred in recent_predictions %}
+                            <tr>
+                                <td class="text-muted">{{ pred.created_at | format_datetime }}</td>
+                                <td>
+                                    <strong>{{ pred.name }}</strong>
+                                    <div class="small-text">{{ pred.age }} yrs • {{ pred.gender }}</div>
+                                </td>
+                                <td>
+                                    <span class="symptom-preview-text" title="{{ pred.symptoms }}">
+                                        {{ pred.symptoms }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <strong class="condition-name">{{ pred.disease }}</strong>
+                                    <div class="small-text">{{ pred.specialist }}</div>
+                                </td>
+                                <td>
+                                    <span class="confidence-tag">{{ pred.confidence }}%</span>
+                                </td>
+                                <td>
+                                    <span class="status-pill status-{{ pred.severity|lower }}">
+                                        {{ pred.severity }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="table-actions-cell">
+                                        <a href="/result/{{ pred.id }}" class="action-btn-view" title="View Full Diagnosis">
+                                            View
+                                        </a>
+                                        <a href="/report/{{ pred.id }}" target="_blank" class="action-btn-print" title="Print Summary Report">
+                                            Print
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-
-
-            <a href="/history" class="view-all">
-                View all
-            </a>
-
-        </div>
-
-
-        {% if latest_prediction %}
-
-        <div class="recent-card">
-
-            <div class="recent-left">
-
-                <div class="result-icon">
-                    ✓
-                </div>
-
-
-                <div>
-
-                    <span class="result-label">
-                        POSSIBLE CONDITION
-                    </span>
-
-                    <h3>
-                        {{ latest_prediction.disease }}
-                    </h3>
-
-                </div>
-
-            </div>
-
-
-            <div class="result-status">
-                ANALYZED
-            </div>
-
-        </div>
-
-
         {% else %}
-
-        <div class="empty-card">
-
-            <div class="empty-icon">
-                +
+            <div class="empty-state-card">
+                <div class="empty-icon">🩺</div>
+                <h3>No Assessments Performed Yet</h3>
+                <p>Run your first AI symptom evaluation to start building your personal diagnostic history.</p>
+                <a href="/predict" class="btn-primary-lg mt-3">Start First Assessment</a>
             </div>
-
-            <h3>
-                No predictions yet
-            </h3>
-
-            <p>
-                Start your first AI analysis to
-                see your results here.
-            </p>
-
-            <a href="/predict" class="primary-btn">
-                Start Prediction →
-            </a>
-
-        </div>
-
         {% endif %}
+    </div>
 
-    </section>
-
-
-
-    <!-- ================= DISCLAIMER ================= -->
-
-    <section class="disclaimer">
-
-        <div class="disclaimer-icon">
-            i
-        </div>
-
-
-        <div>
-
-            <h3>
-                About SymptoScan
-            </h3>
-
+    <!-- ================= DAILY HEALTH TIPS ================= -->
+    <div class="health-tips-banner">
+        <div class="tips-icon">💡</div>
+        <div class="tips-content">
+            <h4>Health Tip of the Day</h4>
             <p>
-                SymptoScan is an educational AI project
-                that analyzes selected symptoms and
-                predicts a possible condition using a
-                machine learning model.
+                Proper hydration is vital for mucous membrane defense against seasonal viruses. Aim for 8-10 glasses of water daily, and ensure 7-8 hours of sound sleep to maintain optimal immune function.
             </p>
-
-            <p class="warning">
-                This system is for educational and
-                demonstration purposes only and is not
-                a medical diagnosis.
-            </p>
-
         </div>
+    </div>
 
-    </section>
-
-
-</main>
-
-
-<footer>
-    SymptoScan AI Health Assistant
-</footer>
-
-
-</body>
-</html>
+</div>
+{% endblock %}

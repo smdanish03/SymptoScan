@@ -1,458 +1,114 @@
 # SymptoScan AI 🩺🤖
+> **Next-Generation AI Clinical Triage & Symptom Assessment Platform**
 
-> **AI-Powered Health Assistant for Educational Disease Prediction**
+[![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/)
+[![Flask Framework](https://img.shields.io/badge/Framework-Flask%203.x-lightgrey.svg)](https://flask.palletsprojects.com/)
+[![Scikit-Learn](https://img.shields.io/badge/ML-Scikit--Learn%20%7C%20Random%20Forest-orange.svg)](https://scikit-learn.org/)
+[![Render Deploy](https://img.shields.io/badge/Deploy-Render%20Ready-green.svg)](https://render.com/)
 
-[🌐 Live Demo](https://symptoscan-production-ab95.up.railway.app) · [💻 GitHub Repository](https://github.com/smdanish03/SymptoScan)
-
-SymptoScan is a web-based educational application that uses **Machine Learning** to analyze selected symptoms and predict a possible health condition.
-
-The application is built using **Python Flask**, **MySQL**, and a **Decision Tree Classifier**. Users can create an account, log in securely, enter patient information, select symptoms, receive an AI-generated possible condition, and view their previous prediction history.
-
-> ⚠️ **Disclaimer:** SymptoScan is an educational and demonstration project. It is **not a medical diagnosis system** and should not be used as a replacement for professional medical advice.
+SymptoScan AI is a full-stack, machine learning-powered educational healthcare application designed to evaluate patient-reported symptoms, deliver calibrated disease predictions with differential diagnoses, route patients to appropriate medical specialists, and generate printable clinical triage summaries.
 
 ---
 
-# 🚀 Live Demo
+## ✨ Key Features
 
-🌐 **Live Application:**
-https://symptoscan-production-ab95.up.railway.app
+- **🧠 Multi-Class Machine Learning Engine:**
+  - Trained on 29+ distinct clinical conditions and 30+ categorized symptoms.
+  - Calibrated Classifier (Random Forest + Sigmoid calibration) returning precise confidence probabilities.
+  - Generates top **Differential Diagnoses** to account for overlapping symptoms.
 
-The application is deployed using **Railway** with a **MySQL database**.
+- **👨‍⚕️ Clinical Triage & Guidance:**
+  - Dynamic severity indicator: **Mild**, **Moderate**, **High**, **Critical / Emergency**.
+  - Direct specialist recommendation (e.g. *Pulmonologist, Neurologist, Gastroenterologist, General Physician*).
+  - 4-point evidence-based care plan & self-care precautions.
+  - Nutrition, dietary, and hydration recommendations.
+  - Emergency Red-Flag alerts for immediate ER attention.
 
----
+- **🎨 Modern Clinical UI / UX:**
+  - Interactive Symptom Checker with categorized filter tabs and instant live search.
+  - One-click presets (*Flu-like, Common Cold, Stomach Upset, Migraine, Allergy*).
+  - Responsive layout with sticky live symptom counter dock.
+  - Floating interactive AI Health Assistant chat widget.
+  - Printable medical triage summary report with PDF export formatting.
 
-# ✨ Features
+- **🗄️ Resilient Multi-Engine Database Architecture:**
+  - **Zero-config SQLite** by default: Runs seamlessly locally and on Render with zero setup.
+  - **PostgreSQL** support for Render Postgres via `DATABASE_URL`.
+  - **MySQL** support for local development or remote instances.
+  - Automated database table creation on startup.
 
-* 👤 User Registration
-* 🔐 Secure Login System
-* 🔑 Password Hashing using Werkzeug
-* 🧠 Machine Learning-Based Disease Prediction
-* 🌳 Decision Tree Classifier
-* 🩺 Symptom-Based Analysis
-* 📊 Prediction History
-* 📈 Dashboard with Recent Prediction Information
-* 🗄️ MySQL Database Integration
-* 🔒 Environment Variables for Sensitive Credentials
-* 📱 Responsive Web Interface
-* ☁️ Cloud Deployment using Railway
-
----
-
-# 🛠️ Technologies Used
-
-## Backend
-
-* Python
-* Flask
-* MySQL
-* mysql-connector-python
-* Werkzeug
-* python-dotenv
-* Gunicorn
-
-## Machine Learning
-
-* NumPy
-* Pandas
-* Scikit-learn
-* Decision Tree Classifier
-
-## Frontend
-
-* HTML5
-* CSS3
-* Google Fonts
-* Jinja2 Templates
-
-## Deployment
-
-* Railway
-* Railway MySQL
+- **⚡ RESTful API Endpoints:**
+  - `GET /api/symptoms` — Retrieve categorized symptom lists.
+  - `POST /api/predict` — Headless disease prediction for web/mobile apps.
+  - `POST /api/assistant-chat` — Symptom triage chat assistant.
+  - `GET /health` — Health check endpoint for cloud uptime monitors.
 
 ---
 
-# 🧠 Machine Learning Model
+## 🛠️ Tech Stack
 
-SymptoScan uses a **Decision Tree Classifier** to predict a possible health condition based on selected symptoms.
-
-## Input Features
-
-The current model uses six symptoms:
-
-1. Fever
-2. Cough
-3. Headache
-4. Vomiting
-5. Fatigue
-6. Body Pain
-
-Each symptom is converted into a binary value:
-
-```text
-Selected     → 1
-Not Selected → 0
-```
-
-The trained model is stored at:
-
-```text
-models/disease_model.pkl
-```
-
-The model is trained using:
-
-```text
-train_model.py
-```
+| Domain | Technology |
+|---|---|
+| **Backend** | Python 3, Flask, Gunicorn, Werkzeug |
+| **Machine Learning** | Scikit-Learn (Random Forest, CalibratedClassifierCV), Pandas, NumPy |
+| **Database** | SQLite (Default/Zero-Config), PostgreSQL, MySQL |
+| **Frontend** | HTML5, CSS3, Vanilla JS, Plus Jakarta Sans, SVG Icons |
+| **Cloud Deployment** | Render, Gunicorn WSGI |
 
 ---
 
-# 🩺 Example Conditions
+## 🚀 Quick Start (Local Development)
 
-The educational dataset contains example conditions such as:
-
-* Flu
-* Common Cold
-* Food Poisoning
-* Dengue
-* Typhoid
-* Allergy
-* Viral Fever
-* Migraine
-
-> These predictions are based on a small educational dataset and should not be interpreted as clinically accurate diagnoses.
-
----
-
-# 📁 Project Structure
-
-```text
-SymptoScan/
-│
-├── app.py
-├── train_model.py
-├── requirements.txt
-├── README.md
-├── .gitignore
-│
-├── data/
-│   └── dataset.csv
-│
-├── models/
-│   └── disease_model.pkl
-│
-├── templates/
-│   ├── index.html
-│   ├── login.html
-│   ├── register.html
-│   ├── dashboard.html
-│   ├── predict.html
-│   ├── result.html
-│   └── history.html
-│
-└── static/
-    └── css/
-        └── style.css
-```
-
-> The `.env` file and `venv` folder should not be uploaded to GitHub.
-
----
-
-# ⚙️ Requirements
-
-Make sure you have installed:
-
-* Python 3.13+
-* MySQL Server
-* Git
-
----
-
-# 📦 Installation
-
-## 1. Clone the Repository
-
+### 1. Clone & Set Up Virtual Environment
 ```bash
 git clone https://github.com/smdanish03/SymptoScan.git
-```
-
-Move into the project folder:
-
-```bash
 cd SymptoScan
+
+# Create and activate virtual environment
+python -m venv venv
+# On Windows:
+.\venv\Scripts\activate
+# On Linux/macOS:
+source venv/bin/activate
 ```
 
----
-
-## 2. Create a Virtual Environment
-
-### Windows
-
-```bash
-py -3.13 -m venv venv
-```
-
-Activate it:
-
-```bash
-venv\Scripts\activate
-```
-
----
-
-## 3. Install Dependencies
-
+### 2. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-# 🗄️ MySQL Database Setup
-
-Create a database:
-
-```sql
-CREATE DATABASE symptoscan;
-```
-
-Select the database:
-
-```sql
-USE symptoscan;
-```
-
-Create the `users` table:
-
-```sql
-CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
-);
-```
-
-Create the `predictions` table:
-
-```sql
-CREATE TABLE predictions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    age INT NOT NULL,
-    gender VARCHAR(20) NOT NULL,
-    symptoms TEXT NOT NULL,
-    disease VARCHAR(100) NOT NULL,
-    user_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-```
-
----
-
-# 🔐 Environment Variables
-
-Create a `.env` file in the project root:
-
-```env
-SECRET_KEY=your_secret_key
-
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_mysql_password
-DB_NAME=symptoscan
-```
-
-> ⚠️ **Never upload your `.env` file to GitHub.**
-
-For deployment, configure the environment variables directly in your hosting platform.
-
----
-
-# 🧠 Train the Machine Learning Model
-
-If the model file does not exist, run:
-
+### 3. Train the AI Model
 ```bash
 python train_model.py
 ```
 
-After successful training:
-
-```text
-Model trained successfully!
-```
-
-The trained model will be created at:
-
-```text
-models/disease_model.pkl
-```
-
-The training script loads the dataset, separates the `Disease` column as the target, trains a `DecisionTreeClassifier`, and saves the trained model.
-
----
-
-# ▶️ Run the Application Locally
-
-Activate the virtual environment:
-
-```bash
-venv\Scripts\activate
-```
-
-Run the application:
-
+### 4. Run the Application
 ```bash
 python app.py
 ```
-
-Open your browser and visit:
-
-```text
-http://127.0.0.1:5000
-```
+Open your browser at **`http://localhost:5000`**.
 
 ---
 
-# 🔄 Application Flow
+## ☁️ Deployment on Render
 
-```text
-User
- │
- ▼
-Home Page
- │
- ▼
-Register / Login
- │
- ▼
-Dashboard
- │
- ▼
-Enter Patient Information
- │
- ▼
-Select Symptoms
- │
- ▼
-Machine Learning Model
- │
- ▼
-Possible Condition
- │
- ▼
-Save Result in MySQL
- │
- ▼
-Prediction History
-```
+Deploying to Render takes under 3 minutes:
+
+1. Push your repository to GitHub.
+2. In [Render Dashboard](https://dashboard.render.com/), click **New +** → **Web Service**.
+3. Select your repository.
+4. Set:
+   - **Runtime:** `Python 3`
+   - **Build Command:** `pip install -r requirements.txt && python train_model.py`
+   - **Start Command:** `gunicorn app:app --bind 0.0.0.0:$PORT`
+5. Add Environment Variable:
+   - `SECRET_KEY`: *(Generate secure key)*
+6. Click **Create Web Service**.
+
+> For comprehensive deployment instructions, check [DEPLOYMENT.md](file:///d:/SymptoScan/DEPLOYMENT.md).
 
 ---
 
-# 🔒 Security Features
+## ⚠️ Medical Disclaimer
 
-SymptoScan includes basic security practices:
-
-* Password hashing using Werkzeug
-* Environment variables for database credentials
-* Session-based authentication
-* Login-protected pages
-* SQL parameterized queries
-* Sensitive credentials excluded from GitHub using `.gitignore`
-
----
-
-# 📱 Main Pages
-
-## 🏠 Home
-
-Introduces SymptoScan and provides access to prediction and account features.
-
-## 📝 Register
-
-Allows new users to create an account.
-
-## 🔐 Login
-
-Authenticates registered users.
-
-## 📊 Dashboard
-
-Displays information such as:
-
-* Total predictions
-* Latest prediction
-* Account status
-* Quick actions
-* Recent activity
-
-## 🩺 Prediction
-
-Users provide:
-
-* Name
-* Age
-* Gender
-* Symptoms
-
-Selected symptoms are converted into machine learning model features.
-
-## 📋 Result
-
-Displays the predicted possible condition and submitted patient information.
-
-## 📜 History
-
-Displays previous prediction records for the logged-in user.
-
----
-
-# ⚠️ Important Disclaimer
-
-SymptoScan is **not a medical device** and does not provide medical diagnosis, treatment, or professional medical advice.
-
-Predictions are generated from a small educational dataset and are intended only to demonstrate how a machine-learning-based web application can work.
-
-For real health concerns, consult a qualified healthcare professional.
-
----
-
-# 🔮 Future Improvements
-
-Possible future improvements include:
-
-* Larger and clinically validated datasets
-* More symptoms and conditions
-* Multiple machine learning algorithms
-* Model accuracy comparison
-* Prediction confidence visualization
-* Doctor consultation module
-* Appointment booking
-* Medical information resources
-* Admin dashboard
-* Better data privacy controls
-* REST API
-* Improved mobile UI
-
----
-
-# 👨‍💻 Author
-
-**Mohd Danish Shaikh**
-
-Computer Engineering Student
-Aspiring Software Engineer
-
-* GitHub: https://github.com/smdanish03
-* LinkedIn: https://www.linkedin.com/in/danish-shaikh-6544a9361
-
----
-
-# 📄 License
-
-This project is created for **educational and academic purposes**.
-
-You are welcome to study, modify, and improve the project for learning and demonstration purposes.
+**SymptoScan AI is an educational demonstration and triage simulation tool.** It does **NOT** provide official medical diagnosis, treatment, or clinical prescriptions. Always consult a licensed medical physician or emergency services for any actual health conditions or emergencies.
