@@ -235,6 +235,58 @@
             background: #094782;
         }
 
+        @media (max-width: 680px) {
+            body {
+                padding: 16px 10px;
+            }
+            .report-page {
+                padding: 20px 16px;
+                border-radius: 6px;
+            }
+            .report-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 14px;
+            }
+            .report-meta {
+                text-align: left;
+                width: 100%;
+                border-top: 1px dashed var(--border);
+                padding-top: 10px;
+            }
+            .patient-table tr {
+                display: flex;
+                flex-direction: column;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            .patient-table td {
+                padding: 8px 12px;
+                border-bottom: none;
+            }
+            .patient-table td.label {
+                width: 100%;
+                background: #f1f5f9;
+                font-size: 12.5px;
+            }
+            .differentials-grid {
+                grid-template-columns: 1fr;
+            }
+            .primary-result-card {
+                padding: 16px;
+            }
+            .primary-result-card h2 {
+                font-size: 19px;
+            }
+            .report-footer {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+            .btn-print {
+                width: 100%;
+            }
+        }
+
         @media print {
             body {
                 background: #ffffff;
@@ -247,6 +299,16 @@
                 box-shadow: none;
                 border: none;
                 padding: 0;
+            }
+            .patient-table tr {
+                display: table-row !important;
+            }
+            .patient-table td {
+                display: table-cell !important;
+            }
+            .patient-table td.label {
+                width: 25% !important;
+                background: transparent !important;
             }
         }
     </style>

@@ -244,11 +244,17 @@ button, input, select, textarea {
 .mobile-toggle {
     display: none;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 5px;
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    z-index: 1051;
 }
 
 .mobile-toggle span {
@@ -256,7 +262,21 @@ button, input, select, textarea {
     height: 2.5px;
     background: var(--dark);
     border-radius: 2px;
-    transition: var(--transition);
+    transition: transform 0.25s ease, opacity 0.2s ease;
+    transform-origin: center;
+}
+
+.mobile-toggle.active span:nth-child(1) {
+    transform: translateY(7.5px) rotate(45deg);
+}
+
+.mobile-toggle.active span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.mobile-toggle.active span:nth-child(3) {
+    transform: translateY(-7.5px) rotate(-45deg);
 }
 
 /* ================= FLASH TOAST NOTIFICATIONS ================= */
@@ -2595,92 +2615,590 @@ button, input, select, textarea {
 }
 
 /* ================= RESPONSIVE MEDIA QUERIES ================= */
+
+/* --- Tablet Landscape & Small Laptops (max-width: 1024px) --- */
 @media (max-width: 1024px) {
+    .page-container {
+        padding: 32px 20px;
+    }
     .hero-container {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 36px;
     }
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
     .workflow-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
     .footer-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 32px;
     }
     .stats-cards-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
     }
     .diagnosis-top-grid {
         grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .form-grid-3 {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
+/* --- Tablets Portrait & Large Mobile (max-width: 768px) --- */
 @media (max-width: 768px) {
+    .navbar-container {
+        height: 68px;
+        padding: 0 18px;
+    }
+
     .nav-menu {
         display: none;
         position: absolute;
-        top: 74px;
+        top: 68px;
         left: 0;
         width: 100%;
-        background: #ffffff;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         border-bottom: 1px solid var(--border);
         flex-direction: column;
-        padding: 24px;
-        gap: 16px;
-        box-shadow: var(--shadow-lg);
+        padding: 20px 20px 24px;
+        gap: 12px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+        z-index: 1050;
     }
+
     .nav-menu.active {
         display: flex;
+        animation: slideDown 0.24s ease-out;
     }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .nav-link {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 15px;
+    }
+
+    .auth-buttons {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 8px;
+        border-top: 1px solid var(--border);
+    }
+
+    .nav-btn-ghost, .nav-btn-primary {
+        width: 100%;
+        text-align: center;
+        padding: 11px;
+    }
+
+    .user-pill {
+        width: 100%;
+        justify-content: space-between;
+        padding: 8px 14px;
+    }
+
     .mobile-toggle {
         display: flex;
     }
-    .hero-title {
-        font-size: 34px;
+
+    .flash-toast-container {
+        top: 76px;
+        right: 16px;
+        left: 16px;
+        max-width: none;
     }
+
+    /* Hero */
+    .hero-section {
+        padding: 50px 20px 60px;
+    }
+
+    .hero-title {
+        font-size: clamp(30px, 7vw, 38px);
+    }
+
+    .hero-description {
+        font-size: 15.5px;
+    }
+
     .hero-actions {
         flex-direction: column;
         align-items: stretch;
+        gap: 12px;
     }
+
+    .btn-primary-lg, .btn-secondary-lg, .btn-ghost-lg {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
     .hero-trust-metrics {
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
         gap: 16px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
     }
+
+    .metric-divider {
+        display: none;
+    }
+
+    /* Grids */
     .features-grid, .workflow-grid, .two-col-grid {
         grid-template-columns: 1fr;
     }
+
     .form-grid-3 {
         grid-template-columns: 1fr;
+        gap: 14px;
     }
+
+    /* Presets & Categories Horizontal Swipe */
+    .presets-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 14px;
+    }
+
+    .preset-buttons {
+        display: flex;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        gap: 8px;
+        padding-bottom: 6px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .preset-buttons::-webkit-scrollbar {
+        display: none;
+    }
+
+    .preset-btn {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .category-tabs {
+        display: flex;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        gap: 8px;
+        padding-bottom: 6px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .category-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab-pill {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .symptoms-chip-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 8px;
+    }
+
+    /* Sticky Submit Dock */
     .submit-dock-card {
         flex-direction: column;
         gap: 14px;
         text-align: center;
+        padding: 16px 20px;
+        bottom: 16px;
     }
-    .footer-grid {
-        grid-template-columns: 1fr;
+
+    .dock-summary {
+        align-items: center;
     }
+
+    .btn-submit-assessment {
+        width: 100%;
+        justify-content: center;
+        padding: 13px 20px;
+    }
+
+    /* Results */
     .result-header-card {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: 16px;
+        padding: 20px;
     }
+
+    .result-header-left {
+        gap: 14px;
+    }
+
     .result-header-actions {
         width: 100%;
-        justify-content: space-between;
+        flex-direction: column;
+        gap: 10px;
     }
+
+    .btn-print-report, .btn-new-assessment {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .specialist-routing-strip {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        gap: 14px;
+        padding: 18px 20px;
+    }
+
+    .specialist-strip-icon {
+        margin: 0 auto;
+    }
+
+    .btn-find-doctor {
+        width: 100%;
+        text-align: center;
+        display: block;
+    }
+
+    .result-footer-nav {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+    }
+
+    /* Dashboard & History */
     .dashboard-welcome-banner {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: 18px;
+        padding: 24px 20px;
     }
+
+    .welcome-action-col, .welcome-action-col .btn-primary-lg {
+        width: 100%;
+        justify-content: center;
+    }
+
     .stats-cards-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
+
+    .stat-card {
+        padding: 16px;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .clinical-table {
+        min-width: 650px;
+    }
+
+    .history-search-form {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .search-input-wrapper {
+        width: 100%;
+    }
+
+    .btn-primary-sm, .btn-secondary-sm {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .auth-card {
+        padding: 28px 20px;
+    }
+
     .assistant-panel {
         width: calc(100vw - 32px);
-        right: -8px;
+        right: 16px;
+        bottom: 80px;
+        height: 75vh;
+        max-height: 480px;
+    }
+}
+
+/* --- Smartphones / Mobile Screen Sizes (max-width: 480px) --- */
+@media (max-width: 480px) {
+    .navbar-container {
+        height: 62px;
+        padding: 0 14px;
+    }
+
+    .brand-title {
+        font-size: 17px;
+    }
+
+    .brand-subtitle {
+        display: none;
+    }
+
+    .logo-icon-wrapper {
+        width: 34px;
+        height: 34px;
+    }
+
+    .logo-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .page-container {
+        padding: 20px 12px;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+
+    .page-subtitle {
+        font-size: 14px;
+    }
+
+    .hero-section {
+        padding: 36px 14px 44px;
+    }
+
+    .hero-title {
+        font-size: 26px;
+    }
+
+    .hero-description {
+        font-size: 14px;
+    }
+
+    .hero-badge {
+        font-size: 11px;
+        padding: 4px 10px;
+    }
+
+    .hero-trust-metrics {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding-top: 16px;
+    }
+
+    .metric-value {
+        font-size: 20px;
+    }
+
+    .metric-label {
+        font-size: 11px;
+    }
+
+    .clinical-preview-card {
+        padding: 16px 14px;
+    }
+
+    .preview-disease {
+        font-size: 17px;
+    }
+
+    .glass-card {
+        padding: 18px 14px;
+    }
+
+    .card-section-title {
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+
+    .section-num {
+        width: 28px;
+        height: 28px;
+        font-size: 13px;
+    }
+
+    .card-section-title h3 {
+        font-size: 16px;
+    }
+
+    .section-hint {
+        font-size: 12px;
+    }
+
+    /* Crucial: 16px font-size prevents iOS Safari automatic zoom on focus */
+    .form-input, .form-select, .search-input {
+        font-size: 16px;
+        height: 46px;
+    }
+
+    .symptoms-chip-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .symptom-checkbox-card {
+        padding: 10px 14px;
+        min-height: 48px;
+    }
+
+    .symptom-name-text {
+        font-size: 13.5px;
+    }
+
+    .selected-chips-tray {
+        padding: 12px 14px;
+    }
+
+    .tray-chip {
+        font-size: 11.5px;
+        padding: 4px 10px;
+    }
+
+    .submit-dock-card {
+        bottom: 12px;
+        padding: 12px 14px;
+        border-radius: var(--radius-md);
+    }
+
+    .counter-text {
+        font-size: 14px;
+    }
+
+    .btn-submit-assessment {
+        font-size: 14px;
+        padding: 12px 16px;
+    }
+
+    /* Diagnosis Result Card */
+    .primary-diagnosis-card {
+        padding: 20px 16px;
+    }
+
+    .disease-title {
+        font-size: 24px;
+    }
+
+    .disease-description {
+        font-size: 13.5px;
+    }
+
+    .confidence-gauge-box {
+        padding: 18px 12px;
+    }
+
+    .confidence-circle {
+        width: 104px;
+        height: 104px;
+    }
+
+    .circle-inner {
+        width: 82px;
+        height: 82px;
+    }
+
+    .confidence-number {
+        font-size: 19px;
+    }
+
+    .stats-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 14px 12px;
+    }
+
+    .stat-icon-wrap {
+        width: 42px;
+        height: 42px;
+    }
+
+    .stat-number {
+        font-size: 19px;
+    }
+
+    .emergency-callout-card {
+        padding: 16px 14px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .emergency-callout-icon {
+        font-size: 26px;
+    }
+
+    .auth-page-container {
+        padding: 20px 12px;
+    }
+
+    .auth-card {
+        padding: 22px 16px;
+    }
+
+    .auth-header h2 {
+        font-size: 21px;
+    }
+
+    .app-footer {
+        padding: 44px 16px 20px;
+    }
+
+    .footer-desc {
+        font-size: 13px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .footer-bottom-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    /* Floating AI Chat Assistant */
+    .assistant-bubble {
+        bottom: 14px;
+        right: 14px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .assistant-panel {
+        width: calc(100vw - 20px);
+        right: 10px;
+        bottom: 70px;
+        height: 72vh;
+        max-height: 460px;
     }
 }
