@@ -7,15 +7,19 @@
     "Body Aches & Muscle Pain",
     "Joint Pain & Swelling",
     "Excessive Sweating",
+    "Night Sweats",
     "Unexplained Weight Loss",
+    "Swollen Lymph Nodes",
     "Dry Cough",
     "Cough with Mucus",
     "Shortness of Breath",
+    "Wheezing",
     "Sore Throat",
     "Runny or Stuffy Nose",
-    "Chest Tightness or Pain",
     "Sneezing",
+    "Chest Tightness or Pain",
     "Loss of Taste or Smell",
+    "Hoarseness or Voice Loss",
     "Nausea",
     "Vomiting",
     "Diarrhea",
@@ -23,16 +27,24 @@
     "Heartburn & Acid Reflux",
     "Loss of Appetite",
     "Abdominal Bloating",
+    "Constipation",
+    "Yellowing of Skin/Eyes (Jaundice)",
     "Severe Throbbing Headache",
     "Dull or Tension Headache",
     "Dizziness & Lightheadedness",
     "Sensitivity to Light/Sound",
     "Stiff Neck & Confusion",
+    "Tremors or Shaking Hands",
+    "Brain Fog & Poor Concentration",
+    "Numbness or Tingling Sensation",
     "Itchy Skin Rash or Hives",
     "Red or Watery Eyes",
     "Burning Urination",
     "Frequent Urination",
-    "Yellowing of Skin/Eyes (Jaundice)"
+    "Dark or Cloudy Urine",
+    "Extreme Thirst & Dry Mouth",
+    "Cold Hands & Feet",
+    "Pale Skin & Brittle Nails"
   ],
   "symptoms_catalog": {
     "General & Systemic": [
@@ -43,42 +55,54 @@
       "Body Aches & Muscle Pain",
       "Joint Pain & Swelling",
       "Excessive Sweating",
-      "Unexplained Weight Loss"
+      "Night Sweats",
+      "Unexplained Weight Loss",
+      "Swollen Lymph Nodes"
     ],
     "Respiratory & ENT": [
       "Dry Cough",
       "Cough with Mucus",
       "Shortness of Breath",
+      "Wheezing",
       "Sore Throat",
       "Runny or Stuffy Nose",
-      "Chest Tightness or Pain",
       "Sneezing",
-      "Loss of Taste or Smell"
+      "Chest Tightness or Pain",
+      "Loss of Taste or Smell",
+      "Hoarseness or Voice Loss"
     ],
-    "Digestive & Gastrointestinal": [
+    "Digestive & Abdominal": [
       "Nausea",
       "Vomiting",
       "Diarrhea",
       "Abdominal Cramps & Pain",
       "Heartburn & Acid Reflux",
       "Loss of Appetite",
-      "Abdominal Bloating"
+      "Abdominal Bloating",
+      "Constipation",
+      "Yellowing of Skin/Eyes (Jaundice)"
     ],
     "Neurological & Sensory": [
       "Severe Throbbing Headache",
       "Dull or Tension Headache",
       "Dizziness & Lightheadedness",
       "Sensitivity to Light/Sound",
-      "Stiff Neck & Confusion"
+      "Stiff Neck & Confusion",
+      "Tremors or Shaking Hands",
+      "Brain Fog & Poor Concentration",
+      "Numbness or Tingling Sensation"
     ],
     "Skin, Eyes & Urinary": [
       "Itchy Skin Rash or Hives",
       "Red or Watery Eyes",
       "Burning Urination",
       "Frequent Urination",
-      "Yellowing of Skin/Eyes (Jaundice)"
+      "Dark or Cloudy Urine",
+      "Extreme Thirst & Dry Mouth",
+      "Cold Hands & Feet",
+      "Pale Skin & Brittle Nails"
     ]
   },
-  "disease_count": 29,
-  "accuracy": 0.9116379310344828
+  "disease_count": 52,
+  "accuracy": 0.9362980769230769
 }

@@ -101,6 +101,8 @@
                     <button type="button" class="preset-btn" data-preset="digestive">Stomach Upset</button>
                     <button type="button" class="preset-btn" data-preset="headache">Severe Migraine</button>
                     <button type="button" class="preset-btn" data-preset="allergy">Allergy Reaction</button>
+                    <button type="button" class="preset-btn" data-preset="uti">UTI / Urinary</button>
+                    <button type="button" class="preset-btn" data-preset="respiratory">Chest & Wheezing</button>
                     <button type="button" class="preset-btn preset-clear" id="clearAllBtn">Clear All</button>
                 </div>
             </div>
@@ -208,7 +210,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'cold': ['Runny or Stuffy Nose', 'Sneezing', 'Sore Throat', 'Mild Fever'],
         'digestive': ['Nausea', 'Vomiting', 'Diarrhea', 'Abdominal Cramps & Pain'],
         'headache': ['Severe Throbbing Headache', 'Sensitivity to Light/Sound', 'Nausea', 'Dizziness & Lightheadedness'],
-        'allergy': ['Sneezing', 'Runny or Stuffy Nose', 'Red or Watery Eyes', 'Itchy Skin Rash or Hives']
+        'allergy': ['Sneezing', 'Runny or Stuffy Nose', 'Red or Watery Eyes', 'Itchy Skin Rash or Hives'],
+        'uti': ['Burning Urination', 'Frequent Urination', 'Dark or Cloudy Urine', 'Abdominal Cramps & Pain'],
+        'respiratory': ['Shortness of Breath', 'Wheezing', 'Chest Tightness or Pain', 'Cough with Mucus']
     };
 
     const selectedTray = document.getElementById('selectedTray');
